@@ -1,0 +1,49 @@
+## Pi is written as #Pi. E is written as #E.
+## -x is written as negative(x). 
+##Exercises taken from Larson and Hostetler page 71,72,79,85
+##71, code line 4-13
+lim x> 2 (x-2)/(square(x)-x-2)
+lim x> 2 (x-2)/(x^2-4)
+lim x> 0 (sqrt(x+3)-sqrt(3))/x
+lim x> -3 ((1-x)^(1/2)-2)/(x+3)
+lim x> 3 (reciprocal(x+1)-reciprocal(4))/(x-3)
+lim x> 4 (x*reciprocal(x+1)-4/5)/(x-4)
+lim x> 1.57079632679 (tan(x)-1)/(x-#Pi/4)
+lim x> 0 (reciprocal(cos(x))-1)/x
+
+##72, code line 14-17
+lim x> 0 sin(x)/x
+lim x> 0 (cos(x)-1)/x
+
+##73, code line 18-25
+lim x> 2 negative(x^2)+x-2
+lim x> 3 sqrt(x+1)
+lim x> 1 cos(#Pi*x)
+lim x> 0 reciprocal(cos(2*x))
+lim x> 4 (x+4)^(1/3)
+lim x> 1 sin(#Pi*x/2)
+
+##85. We are not dealing with two-variable expressions yet. code line 26-38
+##lim h> 0 (2*(x+h)-2*x)/h
+##lim h> 0 ((x+h)^3-x^3)/h
+##lim h> 0 (square(x+h)-2*(x+h)+1-(square(x)-2*x+1)/h
+##lim t> 0 square(sin(t))/square(t)
+##lim x> 0 sin(2*x)/sin(3*x)
+lim x> -1 (square(x)-x)/(x+1)
+lim x> -1 (2*x^2-x-3)/(x+1)
+lim x> 3 (x-3)/(square(x)-9)
+lim x> -1 (x^3+1)/(x+1)
+lim x> -2 (x^3+8)/(x+2)
+lim x> 0 (x+x)^2-square(x)/x
+lim x> 0 ((x+x)^3-x^3)/x 				##Line 38
+lim x> 5 (x-5)/(square(x)-25)
+lim x> 2 (2-x)*reciprocal(square(x)+negative(4))  ##Line 40
+lim x> 1 (square(absVal(x))+x-2)/(x^2-1)
+lim x> 0 (sqrt(2+x)-2^(1/2))/x
+lim x> 0 (sqrt(3+x)-sqrt(3))/x
+lim x> 0 (reciprocal(x+4)-1/4)/x
+lim x> 0 (1/(2+x)-1/2)/x							##Line 45
+lim x> 3 (sqrt(x+1)-2)/(x-3)
+
+
+
