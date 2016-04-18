@@ -1,10 +1,10 @@
 //Class which represents the tangent of an expression. Requires only one expression to function.
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
-public class UnaryTan implements UnaryOperator
-{
+public class UnaryTan implements UnaryOperator {
+
     private Expression _exp = null;
     
     public UnaryTan(Expression e)
@@ -22,4 +22,17 @@ public class UnaryTan implements UnaryOperator
     {
         _exp = e;
     }
+    
+    public String unParse()
+    {
+    	String str = "(tan(" + _exp.unParse()  + "))";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(Tan[" + _exp.toWolf()  + "])";
+    	return str;
+    }
+
 }

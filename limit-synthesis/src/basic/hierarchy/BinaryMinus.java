@@ -1,10 +1,10 @@
 //Class which represents subtraction. Requires two expressions to function.
-package basic.hierarchy;
+package hierarchy;
 
-import java.util.*;
+import java.util.Map;
 
-public class BinaryMinus implements BinaryOperator 
-{
+public class BinaryMinus implements BinaryOperator {
+
     private Expression _exp1 = null;
     private Expression _exp2 = null;
     
@@ -31,5 +31,16 @@ public class BinaryMinus implements BinaryOperator
         {
             _exp1 = e;
         }    
+    }
+    public String unParse()
+    {
+    	String str = "(" + _exp1.unParse() + "-" + _exp2.unParse() + ")";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(" + _exp1.toWolf() + "-" + _exp2.toWolf() + ")";
+    	return str;
     }
 }

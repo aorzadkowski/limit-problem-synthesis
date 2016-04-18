@@ -1,11 +1,11 @@
 //Class which represents log base e of an expression.
 //Requires only 1 expression
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
-public class UnaryNaturalLog implements UnaryOperator
-{
+public class UnaryNaturalLog implements UnaryOperator {
+
     private Expression _exp = null;
     
     public UnaryNaturalLog(Expression e)
@@ -22,5 +22,17 @@ public class UnaryNaturalLog implements UnaryOperator
     public void append(Expression e)
     {
         _exp = e;
-    }    
+    }
+    
+    public String unParse()
+    {
+    	String str = "(ln(" + _exp.unParse() + "))";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(Log[" + _exp.toWolf() + "])";
+    	return str;
+    }
 }

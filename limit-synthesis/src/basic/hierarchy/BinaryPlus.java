@@ -1,12 +1,11 @@
 //Class which represents addition. Requires two expressions to function.
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
+public class BinaryPlus implements BinaryOperator {
 
-public class BinaryPlus implements BinaryOperator
-{
-    private Expression _exp1 = null;
+	private Expression _exp1 = null;
     private Expression _exp2 = null;
     
     public BinaryPlus(Expression e1, Expression e2)
@@ -33,4 +32,16 @@ public class BinaryPlus implements BinaryOperator
             _exp1 = e;
         }
     }
+    public String unParse()
+    {
+    	String str = "(" + _exp1.unParse() + "+" + _exp2.unParse() + ")";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(" + _exp1.toWolf() + "+" + _exp2.toWolf() + ")";
+    	return str;
+    }
+
 }

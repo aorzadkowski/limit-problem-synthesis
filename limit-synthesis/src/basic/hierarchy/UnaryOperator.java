@@ -1,5 +1,5 @@
 //interface for basic functions that require one expression
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 

@@ -1,6 +1,6 @@
 //One of two possible ends to a syntax tree of an expression
 //represents a double
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
@@ -24,5 +24,41 @@ public class Number implements Expression
     public void append(Expression e)
     {
         
+    }
+    
+    public String unParse()
+    {
+    	String str;
+    	if(_num == Math.PI)
+    	{
+    		str = "#Pi";
+    	}
+    	else if(_num == Math.E)
+    	{
+    		str = "#E";
+    	}
+    	else
+    	{
+    		str = ((Double)_num).toString();
+    	}
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str;
+    	if(_num == Math.PI)
+    	{
+    		str = "Pi";
+    	}
+    	else if(_num == Math.E)
+    	{
+    		str = "E";
+    	}
+    	else
+    	{
+    		str = ((Double)_num).toString();
+    	}
+    	return str;
     }
 }

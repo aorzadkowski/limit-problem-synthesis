@@ -1,10 +1,10 @@
 //Class which represents the cosine of an expression. Requires only one expression to function.
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
-public class UnaryCos implements UnaryOperator
-{
+public class UnaryCos implements UnaryOperator {
+
     private Expression _exp = null;
     
     public UnaryCos(Expression e)
@@ -22,4 +22,16 @@ public class UnaryCos implements UnaryOperator
     {
         _exp = e;
     }
+    public String unParse()
+    {
+    	String str = "(cos(" + _exp.unParse() + "))";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(Cos[" + _exp.toWolf() + "])";
+    	return str;
+    }
+
 }

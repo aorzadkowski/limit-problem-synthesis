@@ -1,11 +1,11 @@
 //Class which represents an multiplicative inverse value of an expression.
 //Requires only 1 expression
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
-public class UnaryReciprocal implements UnaryOperator
-{
+public class UnaryReciprocal implements UnaryOperator {
+
     private Expression _exp = null;
     
     public UnaryReciprocal(Expression e)
@@ -22,5 +22,16 @@ public class UnaryReciprocal implements UnaryOperator
     public void append(Expression e)
     {
         _exp = e;
-    }    
+    }
+    public String unParse()
+    {
+    	String str = "(reciprocal("+  _exp.unParse() + "))";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(1/" + _exp.toWolf() + ")";
+    	return str;
+    }
 }

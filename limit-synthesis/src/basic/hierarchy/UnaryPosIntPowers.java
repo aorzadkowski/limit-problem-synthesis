@@ -1,15 +1,22 @@
 //Class which represents raising an expression to the nth power.
 //where n is a positive integer
 //Requires only one expression to function.
-package basic.hierarchy;
+
+package hierarchy;
 
 import java.util.Map;
 
-public class UnaryPosIntPowers implements UnaryOperator
-{
+public class UnaryPosIntPowers implements UnaryOperator {
+
+	//USE BINARY EXPONENT INSTEAD.
     private Expression _exp = null;
     private int _n;
     
+    public UnaryPosIntPowers(Expression e)
+    {
+    	_exp = e;
+    	_n = 3;
+    }
     
     public UnaryPosIntPowers(Expression e, int n)
     {
@@ -27,4 +34,15 @@ public class UnaryPosIntPowers implements UnaryOperator
     {
         _exp = e;
     }
+    public String unParse()
+    {
+    	String str = "(" + _exp.unParse() + "^" + _n + ")";
+    	return str;
+    }
+    public String toWolf()
+    {
+    	String str = "(" + _exp.toWolf() + "^" + _n + ")";
+    	return str;
+    }
+    
 }

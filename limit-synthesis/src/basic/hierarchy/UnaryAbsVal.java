@@ -1,10 +1,10 @@
 //Class which represents the absolute value of an expression. Requires only 1 expression
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
-public class UnaryAbsVal implements UnaryOperator
-{
+public class UnaryAbsVal implements UnaryOperator {
+
     private Expression _exp = null;
     
     public UnaryAbsVal(Expression e)
@@ -21,5 +21,16 @@ public class UnaryAbsVal implements UnaryOperator
     public void append(Expression e)
     {
         _exp = e;
-    }    
+    }
+    public String unParse()
+    {
+    	String str = "(absVal(" + _exp.unParse() + "))";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(Abs[" + _exp.toWolf() + "])";
+    	return str;
+    }
 }
