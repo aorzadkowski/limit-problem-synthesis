@@ -8,7 +8,7 @@ public class Lexer
 	  public static enum TokenType 
 	  {
 		    COMMENT("##"),
-		    LIMITEXPRESSION("lim " + "[a-z,A-Z]" + "[>][+]?[-]?[ ]" + "[-]?[0-9]*[.]?[0-9]+" + "[ ]"),  
+		    LIMITEXPRESSION("lim " + "[a-z,A-Z]" + "[>][+]?[-]?[ ]" + "[^ ]+" + "[ ]"),  
 		    PI("#Pi"),
 		    E("#E"),
 		    NUMBER("[0-9]*[.]?[0-9]+"),

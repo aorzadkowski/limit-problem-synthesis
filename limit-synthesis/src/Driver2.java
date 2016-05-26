@@ -20,11 +20,9 @@ public class Driver2
         String line = null;
 
         try {
-            // FileReader reads text files in the default encoding.
             FileReader fileReader = 
                 new FileReader(fileName);
 
-            // Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = 
                 new BufferedReader(fileReader);
 
@@ -36,7 +34,6 @@ public class Driver2
                 index++;
             }   
 
-            // Always close files.
             bufferedReader.close();         
         }
         catch(FileNotFoundException ex) {
@@ -57,7 +54,7 @@ public class Driver2
 		int index = 0;
 		for(String testStr0: LinesOfTextFile)
 		{
-			//String testStr1 = "0-x+2"; //"lim x> 1 reciprocal(2.0*5.0)+3.0+square(6.0*7.0/4.0)+sqrt(absVal(3.0*11.0+18.0))/cos(sin(cos(3.141592653589793/2.0)))"; 
+			//String testStr1 = "lim x> #Pi/2 x+2"; //"lim x> 1 reciprocal(2.0*5.0)+3.0+square(6.0*7.0/4.0)+sqrt(absVal(3.0*11.0+18.0))/cos(sin(cos(3.141592653589793/2.0)))"; 
 			System.out.println();
 			System.out.println("Now Processing line: " + index);
 			
@@ -78,7 +75,7 @@ public class Driver2
 				LimitExpressionList.add(prsr.getLimit());
 				System.out.println("Here is the LimitExpression " + prsr.getLimit().unParse());
 				
-				System.out.println("Here is the Expression " + e.unParse());
+				//System.out.println("Here is the Expression " + e.unParse());
 				
 				//now to evaluate for the limit expression variable
 				HashMap m = new HashMap<Variable, Double>();
@@ -88,7 +85,7 @@ public class Driver2
 				}
 				else
 				{
-					Double varEquals = (1.0);
+					Double varEquals = prsr.getLimit().getTargetDouble();
 					System.out.println("solving for " + prsr.getLimit().getVariable().getName() + " = " + varEquals + " & ");
 					m.put(prsr.getLimit().getVariable(), varEquals);
 					varEquals = null;
@@ -106,18 +103,38 @@ public class Driver2
 		for(LimitExpression l : LimitExpressionList)
 		{
 			System.out.println(l.translateToWolfram());
+			if(l.isContinuousAtTarget())
+			{
+				System.out.println("And is it continuous at the approach value?	" 
+						+ l.isContinuousAtTarget() + "    And the value at that point is " + l.evaluate());
+			}
+			else
+			{
+				System.out.println("And is it continuous at the approach value?	" 
+						+ l.isContinuousAtTarget());
+			}
+			System.out.println("And the left handed behavior is:\t" + l.leftHandBehaviorAtTarget());
+			System.out.println("And the right handed behavior is:\t" + l.rightHandBehaviorAtTarget());
+			System.out.println();
+					
 		}
 		
 		
 		//Questions:
-		//How to format doubles
-		//You can't have _target be Pi or E or Pi/2 yet.
-		//Parenthesis in Mathematica
+		//line 103  ^(1/3)
+		//Continuity?
+		//Tan(x) continuity												X
+		//sqrt(x) continuity											X
+		//left-right continuity
+		//Function?
+		//How to format doubles											X
+		//You can't have _target be Pi or E or Pi/2 yet.				X
+		//Parenthesis in Mathematica									X
 		//deal with constants											X
-		//push to github
+		//push to github												X
 		//incorporate limits into parser								X
 		//How are variables going to work?								X							
-		//Right now, you can't do -x+2									
+		//Right now, you can't do -x+2									X				
 		//what is a limit going to be?									X				
 		//Should we change posIntPowers to a Binary operation?			X
 		//Any ideas on how to deal with absval? ||a|*b|					X

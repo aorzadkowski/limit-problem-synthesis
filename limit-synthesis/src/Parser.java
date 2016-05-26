@@ -12,8 +12,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Parser 
 {
-	//used to access variables
-	private ArrayList<Variable> _variables;
+	private ArrayList<Variable> _variables; //used to access variables used in the expression.
+											//usually to verify that variables in the limit expression are
+											//contained in the expression. 
 	private String _limitString = "";
 	private LimitExpression _limit;
 	//constructor
@@ -22,6 +23,8 @@ public class Parser
 		_variables = new ArrayList<Variable>();
 		_limit = new LimitExpression();
 	}
+	
+	//Accessor methods
 	public ArrayList<Variable> getVar()
 	{
 		return _variables;
@@ -43,6 +46,7 @@ public class Parser
 	//Given a lexed ArrayList of Tokens, this method will first convert the ArrayList (which is in infix notation)
 	//to a ConcurrentLinkedQueue (which is in postfix notation). Then this method will create an Expression from this postfix queue.
 	//It returns the resulting Expression.
+	//At the same time, this method takes the limit expression token and converts it to a LimitExpression object.
 	public Expression parse(ArrayList<Lexer.Token> input)
 	{
 		input.trimToSize();
@@ -59,7 +63,8 @@ public class Parser
 		//			MULTIPLY/DIVIDE
 		//			ADD/SUBTRACT
 		
-		//These tokens are utility tokens used during the do-while loop. They help deal with the subtraction vs. negative ambiguity among other things.
+		//These tokens are utility tokens used during the do-while loop. 
+		//They help deal with the subtraction vs. negative ambiguity among other things.
 		Lexer.Token whitespace = new Lexer.Token(TokenType.WHITESPACE, " ");
 		Lexer.Token previousToken = whitespace;
 		Lexer.Token afterInserted = whitespace;
@@ -81,7 +86,6 @@ public class Parser
 				}
 				else if(toke.getType().equals(Lexer.TokenType.LIMITEXPRESSION))
 				{
-						//Right now, A limit expression doesn't do anything
 					    postfix.add(toke);
 				}
 				else if(toke.getType().equals(Lexer.TokenType.NUMBER) || toke.getType().equals(Lexer.TokenType.VARIABLE) || toke.getType().equals(Lexer.TokenType.E) || toke.getType().equals(Lexer.TokenType.PI))
@@ -106,17 +110,7 @@ public class Parser
 				}
 				else if(toke.getType().equals(Lexer.TokenType.UNARYOP))
 				{
-//					//handles constant pi
-//					if(toke.getData().equalsIgnoreCase("pi"))
-//					{
-//						String piString = ((Double)Math.PI).toString();
-//						Lexer.Token pi = new Lexer.Token(TokenType.NUMBER, piString);
-//						postfix.add(pi);
-//					}
-//					else
-//					{
-						operator.push(toke);
-					//}
+					operator.push(toke);
 				}
 				else if(toke.getType().equals(Lexer.TokenType.BINARYOP)) //SEE ABOVE PRECEDENCE
 				{
@@ -291,7 +285,7 @@ public class Parser
 		
 		if(!postfix.isEmpty())
 		{
-			//First we remove the LIMITEXPRESSION because it does nothing as of now.
+			//First we remove the LIMITEXPRESSION.
 			if(postfix.peek().getType().equals(TokenType.LIMITEXPRESSION))
 			{
 				_limitString = postfix.poll().getData();
@@ -390,7 +384,7 @@ public class Parser
 				}
 				else
 				{
-					System.err.println("YOU FORGOT A BININARY OPERATOR IN THE TOEXPRESSION PHASE.");
+					System.err.println("YOU FORGOT A BINARY OPERATOR IN THE TOEXPRESSION PHASE.");
 				}
 			}
 			else if(current.getType().equals(TokenType.UNARYOP))
@@ -477,7 +471,7 @@ public class Parser
 		//now to create a limit out of this Expression
 		if(_limitString.equalsIgnoreCase(""))
 		{
-			_limit = new LimitExpression("lim x> 0 ", output);
+			_limit = null;
 		}
 		else
 		{
