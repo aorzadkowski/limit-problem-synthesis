@@ -9,7 +9,7 @@ lim x> 0 (sqrt(x+3)-sqrt(3))/x
 lim x> -3 ((1-x)^(1/2)-2)/(x+3)
 lim x> 3 (reciprocal(x+1)-reciprocal(4))/(x-3)
 lim x> 4 (x*reciprocal(x+1)-4/5)/(x-4)
-lim x> 1.57079632679 (tan(x)-1)/(x-#Pi/4)
+lim x> #Pi/4 (tan(x)-1)/(x-#Pi/4)
 lim x> 0 (reciprocal(cos(x))-1)/x
 
 ##72, code line 14-17
@@ -49,8 +49,89 @@ lim x> 0 sin(x)/(5*x)
 lim x> 0 (3*(1-cos(x)))/x
 lim t> 0 (reciprocal(cos(t))-1)/(t*reciprocal(cos(t)))
 lim t> 0 (cos(t)*tan(t))/t							##Line 50
-lim p> 3.141 (p*reciprocal(cos(p)))
+lim p> #Pi (p*reciprocal(cos(p)))
 lim x> 2 cos(x)/reciprocal(tan(x))
 
 ##93
 lim x>+ 5 (x-5)/(square(x)-25)						##Line 55
+lim x>+ 2 (2-x)/(square(x)-4)
+lim x>- 2 x/sqrt(square(x)-4)
+lim x>- 4 (sqrt(x)-2)/(x-4)
+lim h>+ 0 (2*(h+h)-2*h)/h
+lim x>- 1 (square(x)-2*x+1)/(x-1)					##Line 60
+lim x> 0 absVal(x)/x
+lim x> 2 absVal(x-2)/(x-2)
+													##Skipping Piecewise functions for now.
+lim x> #Pi reciprocal(tan(x))
+lim x> #Pi/2 reciprocal(cos(x)) 					##Line 65
+
+##97
+lim x>- 1 reciprocal(x-1)
+lim x>+ 1 reciprocal(x-1)
+lim x> 1 reciprocal(square(x-1))					##Line 70
+lim x>- 1 negative(reciprocal(x-1))
+lim x>+ 1 negative(reciprocal(x-1))
+lim x> 1 negative(reciprocal(square(x-1)))
+
+##102												  Line 75
+lim x>+ 2 (x-3)/(x-2)
+lim x>+ 1 (2+x)/(1-x)
+lim x>+ 4 square(x)/(square(x)-16)
+lim x> 4 square(x)/(square(x)-16)
+lim x>- 0 1+reciprocal(x)							##Line 80
+lim x>- 0 square(x)-reciprocal(x)
+lim x>+ 0 2/sin(x)
+lim x>+ #Pi/2 -2/cos(x)
+lim x> 1 (square(x)-x)*reciprocal((square(x)+1)*(x-1))
+lim x> 1 (x^3-1)/(square(x)+x+1)					##Line 85
+lim x>+ 1 (square(x)+x+1)/(x^3-1)
+lim x>- 0 (square(x)-2*x)/(x^3)
+
+##103
+lim x> 2 5*x-3										##Line 90
+lim x> 2 3*x+5
+lim x> 2 (5*x-3)*(3*x+5)
+lim x> 2 (3*x+5)/(5*x-3)
+lim t> 3 (square(t)+1)/t
+lim t> 3 (square(t)-9)/(t-3)						##Line 95
+lim t> -2 (t+2)/(t^2-4)
+lim x> 0 (sqrt(4+x)-2)/x
+lim x> 0 (reciprocal(x+1)-1)/x
+lim s> 0 (reciprocal(sqrt(1+s))-1)/s
+lim x> -1 (x^3+1)/(x+1)								##Line 100
+lim x> -2 (square(x)-4)/(x^3+8)
+lim x>+ 0 x-reciprocal(x^3)
+lim x> 2 reciprocal((square(x)-4)^(1/3))
+lim x>- -2 (2*square(x)+x+1)/(x+2)
+lim x> 1/2 (2*x-1)/(6*x-3)							##Line 105
+lim x> -1 (x+1)/(x^3+1)
+lim x> -1 (x+1)/(x^4-1)
+lim x> 1 (square(x)-2*x+1)/(x+1)
+lim x>+ -1 (square(x)-2*x+1)/(x+1)
+lim x> 0 sin(4*x)/(5*x)								##Line 110
+lim x>+ 0 reciprocal(cos(x))/x
+lim x>+ 0 reciprocal(sin(2*x))/x
+lim x>- 0 square(cos(x))/x
+
+##104												##Line 115
+lim x> 0 absVal(x)/x
+lim x> 0 3
+lim x> 3 negative(square(x))+8*x-14
+lim x> 0 sqrt(x)
+lim x> 0 x^3										##Line 120
+lim x> 0 x^(1/3)
+lim x> 0 0
+lim x> 0 reciprocal(square(x-2))
+lim x> 0 3*reciprocal(x+1)
+lim x> 0 (3*square(x)-x-2)/(x-1)					##Line 125
+lim x> 0 sqrt((x+2)/x)
+lim x> -1 (x+1)/(2*x+2)
+lim x> 0 reciprocal(sin(x*(#Pi/2)))
+lim x> 0 tan(2*x)
+lim x> 0 negative(3)^(1/3)
+
+##Testing continuity of interesting functions
+lim x> (#Pi)/2 tan(x)
+lim x> #Pi sin(x)
+lim x> (3*#Pi)/2 cos(x)
+lim x> 0 sqrt(x)
