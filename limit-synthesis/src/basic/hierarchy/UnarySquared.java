@@ -24,6 +24,13 @@ public class UnarySquared implements UnaryOperator {
         _exp = e;
     }
     
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	return (result && _exp.isContinuousAt(variableMap));
+    }
+    
     public String unParse()
     {
     	String str = "(square(" + _exp.unParse() + "))";

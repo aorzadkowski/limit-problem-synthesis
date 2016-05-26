@@ -41,6 +41,12 @@ public class Variable implements Expression
     {
 
     }
+    
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	return true;
+    }
 
     public String unParse()
     {

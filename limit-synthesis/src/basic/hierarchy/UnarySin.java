@@ -16,12 +16,25 @@ public class UnarySin implements UnaryOperator {
     {
         if(_exp == null) throw new IllegalArgumentException("This Sin has not been initialized");
         
+        if((_exp.evaluate(variableMap) == 0) || ((_exp.evaluate(variableMap)%(Math.PI) == 0)))
+        {
+        	return 0.0;
+        }
+        
         return Math.sin(_exp.evaluate(variableMap));
     }
     public void append(Expression e)
     {
         _exp = e;
     }
+    
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	return (result && _exp.isContinuousAt(variableMap));
+    }
+    
     public String unParse()
     {
     	String str = "(sin(" + _exp.unParse()+ "))";

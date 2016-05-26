@@ -23,6 +23,14 @@ public class UnaryPlus implements UnaryOperator {
     {
         _exp = e;
     }
+    
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	return (result && _exp.isContinuousAt(variableMap));
+    }
+    
     public String unParse()
     {
     	String str = "(" + _exp.unParse() + ")";

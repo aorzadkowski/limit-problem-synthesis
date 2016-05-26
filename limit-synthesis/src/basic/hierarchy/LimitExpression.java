@@ -1,6 +1,9 @@
 package hierarchy;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import lexerAndParser.*;
 
 public class LimitExpression 
 {
@@ -10,7 +13,7 @@ public class LimitExpression
 	private final int BOTH = 0;
 	
 	private Variable _variable; //the variable which approaches the target value;
-	private Number _target; //the target value;
+	private Expression _target; //the target value;
 	
 	private Expression _function; //the function.
 	
@@ -18,7 +21,7 @@ public class LimitExpression
 	{
 		_LRB = BOTH;
 		_variable = (Variable)null;
-		_target = (Number)null;
+		_target = (Expression)null;
 		_function = (Expression)null;
 	}
 	
@@ -42,14 +45,33 @@ public class LimitExpression
 		{
 			_LRB = BOTH;
 		}
-		//now to determine _target which is the remainder of the string. 
+		
+		//now to determine _target which is the remainder of the string. In order to allow for targets like pi/2, we parse
+		//the remainder of the string and assign _target to be the evaluation of that expression. For example, #Pi/2 would
+		//assign the _target to be new Number(Math.PI/2).
+
+		
+		
+		
 		if(_LRB == BOTH)
 		{
-			_target = new Number(Double.parseDouble(stringRepresentation.substring(7, stringRepresentation.length()-1)));
+			String targetString = stringRepresentation.substring(7, stringRepresentation.length()-1);
+			Lexer LELexer = new Lexer();
+			Parser LEParser = new Parser();
+			ArrayList<Lexer.Token> LELOutput= LELexer.lex(targetString);
+			Expression exp = LEParser.parse(LELOutput);
+			//System.out.println("Here is the target Expression " + exp.unParse());
+			_target = exp;
 		}
 		else
 		{
-			_target = new Number(Double.parseDouble(stringRepresentation.substring(8, stringRepresentation.length()-1)));
+			String targetString = stringRepresentation.substring(8, stringRepresentation.length()-1);
+			Lexer LELexer = new Lexer();
+			Parser LEParser = new Parser();
+			ArrayList<Lexer.Token> LELOutput= LELexer.lex(targetString);
+			Expression exp = LEParser.parse(LELOutput);
+			//System.out.println("Here is the target Expression " + exp.unParse());
+			_target = exp;
 		}
 		_function = aFunction;		
 	}
@@ -60,10 +82,121 @@ public class LimitExpression
 		return _function.evaluate(variableMap);
 	}
 	
+	
+	
+	public boolean isContinuousAt(Variable var, Double doub)
+	{
+		HashMap m = new HashMap<Variable, Double>();
+		m.put(var, doub);
+		if(_function.isContinuousAt(m))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isContinuousAtTarget()
+	{
+		HashMap m = new HashMap<Variable, Double>();
+		HashMap m2 = new HashMap<Variable, Double>();
+		m.put(_variable, _target.evaluate(m2));
+		if(_function.isContinuousAt(m))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	//This method examines the output values of the function as the input values approach the target from the left.
+	//This method returns a string which describes the behavior of the function under these circumstances. 
+	public String leftHandBehaviorAtTarget()
+	{
+		String change;
+		String approximation;
+		
+		HashMap m = new HashMap<Variable, Double>();
+		HashMap m2 = new HashMap<Variable, Double>();
+		Double targetDouble = _target.evaluate(m2);
+		m.put(_variable, targetDouble - .0001);
+		
+		Double approx1 = _function.evaluate(m);
+		m.clear();
+		m.put(_variable, targetDouble - .00001);
+		Double approx2 = _function.evaluate(m);
+		m.clear();
+		m.put(_variable, targetDouble - .000001);
+		Double approx3 = _function.evaluate(m);
+
+
+		if(approx1 > approx2 && approx2 > approx3)
+		{
+			change = "negative";
+		}
+		else if(approx1 < approx2 && approx2 < approx3)
+		{
+			change = "positive";
+		}
+		else if(approx1.equals(approx2) && approx2.equals(approx3))
+		{
+			change = "zero";
+		}
+		else
+		{
+			change = "not clear";
+		}
+		
+		return ("An approximation is " + approx3 + " and the slope is " + change);
+	}
+	
+	//This method examines the output values of the function as the input values approach the target from the left.
+		//This method returns a string which describes the behavior of the function under these circumstances. 
+		public String rightHandBehaviorAtTarget()
+		{
+			String change;
+			String approximation;
+			
+			HashMap m = new HashMap<Variable, Double>();
+			HashMap m2 = new HashMap<Variable, Double>();
+			Double targetDouble = _target.evaluate(m2);
+			m.put(_variable, targetDouble + .0001);
+			
+			Double approx3 = _function.evaluate(m);
+			m.clear();
+			m.put(_variable, targetDouble + .00001);
+			Double approx2 = _function.evaluate(m);
+			m.clear();
+			m.put(_variable, targetDouble + .000001);
+			Double approx1 = _function.evaluate(m);
+
+
+			if(approx1 > approx2 && approx2 > approx3)
+			{
+				change = "negative";
+			}
+			else if(approx1 < approx2 && approx2 < approx3)
+			{
+				change = "positive";
+			}
+			else if(approx1.equals(approx2) && approx2.equals(approx3))
+			{
+				change = "zero";
+			}
+			else
+			{
+				change = "not clear";
+			}
+			
+			return ("An approximation is " + approx3 + " and the slope is " + change);
+		}
+	
 	//This method will eventually solve the limit expression
 	public double evaluate()
 	{
-		return 0;
+		HashMap m = new HashMap<Variable, Double>();
+		HashMap m2 = new HashMap<Variable, Double>();
+		m.put(_variable, _target.evaluate(m2));
+		return _function.evaluate(m);
+
 	}
 	
 	//Wolfram expects a limit expression to look like this:
@@ -76,7 +209,7 @@ public class LimitExpression
 	{
 		if(_LRB == BOTH)
 		{
-			return "Limit[" + _function.toWolf() + "," + _variable.toWolf() + "->" + _target.toWolf() + "]";
+			return "Limit[" + _function.toWolf() + ", " + _variable.toWolf() + "->" + _target.toWolf() + "]";
 		}
 		else
 		{
@@ -92,7 +225,12 @@ public class LimitExpression
 	{
 		_variable = newVariable;
 	}
-	
+	public Double getTargetDouble()
+	{
+		HashMap m = new HashMap<Variable, Double>();
+		return _target.evaluate(m);
+	}
+		
 	public String unParse()
 	{
 		String str = "";

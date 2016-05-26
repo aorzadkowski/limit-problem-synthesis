@@ -29,6 +29,13 @@ public class BinaryExponent implements Expression, BinaryOperator
 		
 
 	}
+	
+	@Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	return (result && _exp1.isContinuousAt(variableMap) && _exp2.isContinuousAt(variableMap));
+    }
 
 	@Override
 	public String unParse() 

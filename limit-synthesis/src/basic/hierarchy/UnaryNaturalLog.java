@@ -24,6 +24,17 @@ public class UnaryNaturalLog implements UnaryOperator {
         _exp = e;
     }
     
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	if(_exp.evaluate(variableMap) <= 0)
+    	{
+    		result = false;
+    	}
+    	return (result && _exp.isContinuousAt(variableMap));
+    }
+    
     public String unParse()
     {
     	String str = "(ln(" + _exp.unParse() + "))";

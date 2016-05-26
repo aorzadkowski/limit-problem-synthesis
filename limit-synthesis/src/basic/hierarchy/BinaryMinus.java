@@ -32,6 +32,14 @@ public class BinaryMinus implements BinaryOperator {
             _exp1 = e;
         }    
     }
+    
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	return (result && _exp1.isContinuousAt(variableMap) && _exp2.isContinuousAt(variableMap));
+    }
+    
     public String unParse()
     {
     	String str = "(" + _exp1.unParse() + "-" + _exp2.unParse() + ")";
