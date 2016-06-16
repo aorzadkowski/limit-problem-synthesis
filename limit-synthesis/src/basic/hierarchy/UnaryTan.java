@@ -22,4 +22,14 @@ public class UnaryTan implements UnaryOperator
     {
         _exp = e;
     }
+    @Override
+	public String getExpression() {
+		return "tan";
+	}  
+    
+	@Override
+	public Expression getNextExpression() {
+		// TODO Auto-generated method stub
+		return _exp;
+	}  
 }

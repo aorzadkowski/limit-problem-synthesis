@@ -1,10 +1,10 @@
 //Class which represents subtraction. Requires two expressions to function.
-package basic.hierarchy;
+package hierarchy;
 
-import java.util.*;
+import java.util.Map;
 
-public class BinaryMinus implements BinaryOperator 
-{
+public class BinaryMinus implements BinaryOperator {
+
     private Expression _exp1 = null;
     private Expression _exp2 = null;
     
@@ -33,20 +33,32 @@ public class BinaryMinus implements BinaryOperator
         }    
     }
     
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	return (result && _exp1.isContinuousAt(variableMap) && _exp2.isContinuousAt(variableMap));
+    }
+    
+    public String unParse()
+    {
+    	String str = "(" + _exp1.unParse() + "-" + _exp2.unParse() + ")";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(" + _exp1.toWolf() + "-" + _exp2.toWolf() + ")";
+    	return str;
+    }
+
 	@Override
 	public Expression getLeftExpression() {
-		// TODO Auto-generated method stub
 		return _exp1;
 	}
 
 	@Override
 	public Expression getRightExpression() {
-		// TODO Auto-generated method stub
 		return _exp2;
-	} 
-	
-	@Override
-	public String getExpression() {
-		return "-";
-	}  
+	}
 }

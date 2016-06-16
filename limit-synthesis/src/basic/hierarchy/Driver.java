@@ -2,18 +2,56 @@ package basic.hierarchy;
 
 import java.util.*;
 
+import fitness.TreeAnalysis;
+import graph.Digraph;
+
 public class Driver 
 {
     public static void main(String[] args)
     {
 //************************************TEST0        
-        Variable x1 = new Variable(0);
-        Variable x2 = new Variable(0);
-        Map<Variable,Double> variableMap = new HashMap<Variable,Double>();
-        variableMap.put(x1, 0.0);
-        variableMap.put(x2, 0.0);
-        System.out.println("x1 = " + x1.evaluate(variableMap));
-        System.out.println("x2 = " + x1.evaluate(variableMap));
+//        Variable x1 = new Variable(0);
+//        Variable x2 = new Variable(0);
+//        Map<Variable,Double> variableMap = new HashMap<Variable,Double>();
+//        variableMap.put(x1, 0.0);
+//        variableMap.put(x2, 0.0);
+//        System.out.println("x1 = " + x1.evaluate(variableMap));
+//        System.out.println("x2 = " + x1.evaluate(variableMap));
+//        
+        System.out.println("Testing Graph");
+        Digraph.testDigraph();
+        
+        System.out.println("\nTesting tree reading: ");
+        System.out.println("f(x) = x + 2");
+        
+        Map<Variable, Double> variableMap = new HashMap<>();
+        
+        Variable x = new Variable(1);
+        
+        variableMap.put(x, 1.0);
+        
+        BinaryOperator p = new BinaryPlus(x, new Number(2));
+        
+        System.out.println("f(1) = " + p.evaluate(variableMap));
+        
+        TreeAnalysis temp = new TreeAnalysis(p);
+        temp.readExpression();
+        
+        System.out.println(temp);
+        
+        System.out.println("\nf(x) = x + 2 + 2 + 2 + 2");
+        
+        x = new Variable(1);
+        variableMap.put(x, 1.0);
+        
+        p = new BinaryPlus(x, new BinaryPlus(new Number(2), new BinaryPlus(new Number(2), new BinaryPlus( new Number(2), new Number(2)))));
+        
+        System.out.println("f(1) = " + p.evaluate(variableMap));
+        
+        temp = new TreeAnalysis(p);
+        temp.readExpression();
+        
+        System.out.println(temp);
         
 //        //--------Unary
 //        UnaryAbsVal u1 = new UnaryAbsVal(x1);
@@ -76,7 +114,9 @@ public class Driver
 //        variableMap.put(t, 0.1);
 //        variableMap.put(t, 9999.0);
 //                
-//        System.out.println(d1.evaluate(variableMap));
+//        System.out.println(variableMap.values());
+//        
+//        System.out.println("f(x) = sin^2(x) + cos^2(x);  x = 1;  f(1) = " + d1.evaluate(variableMap));
 //************************************TEST2       
 //        //sin^2(t1) + cos^2(t2)
 //        Variable t1 = new Variable(1);

@@ -1,11 +1,11 @@
 //Class which represents an additive opposite value of an expression.
 //Requires only 1 expression
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
-public class UnaryMinus implements UnaryOperator
-{
+public class UnaryMinus implements UnaryOperator {
+
     private Expression _exp = null;
     
     public UnaryMinus(Expression e)
@@ -22,15 +22,29 @@ public class UnaryMinus implements UnaryOperator
     public void append(Expression e)
     {
         _exp = e;
-    }    
-    @Override
-	public String getExpression() {
-		return "(-)";
-	}  
+    }
     
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	return (result && _exp.isContinuousAt(variableMap));
+    }
+    
+    public String unParse()
+    {
+    	String str = "(negative(" + _exp.unParse() + "))";
+    	return str;
+    }
+    public String toWolf()
+    {
+    	String str = "(-" + _exp.toWolf() + ")";
+    	return str;
+    }
+
 	@Override
 	public Expression getNextExpression() {
 		// TODO Auto-generated method stub
 		return _exp;
-	}  
+	}
 }

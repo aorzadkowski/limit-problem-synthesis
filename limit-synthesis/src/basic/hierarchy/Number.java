@@ -25,4 +25,8 @@ public class Number implements Expression
     {
         
     }
+    @Override
+	public String getExpression() {
+		return "" + _num;
+	}  
 }

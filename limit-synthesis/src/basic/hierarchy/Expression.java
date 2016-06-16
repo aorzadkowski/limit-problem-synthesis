@@ -7,4 +7,6 @@ public interface Expression
 {
     public abstract double evaluate(Map<Variable,Double> variableMap);
     public abstract void append(Expression e);
+    public String toString();
+    public String getExpression();
 }

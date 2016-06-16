@@ -1,11 +1,11 @@
 //Class which represents raising an expression to the second power. 
 //Requires only one expression to function.
-package basic.hierarchy;
+package hierarchy;
 
 import java.util.Map;
 
-public class UnarySquared implements UnaryOperator
-{
+public class UnarySquared implements UnaryOperator {
+
     private Expression _exp = null;
     
     public UnarySquared(Expression e)
@@ -23,14 +23,29 @@ public class UnarySquared implements UnaryOperator
     {
         _exp = e;
     }
-    @Override
-	public String getExpression() {
-		return "^2";
-	}  
     
+    @Override
+    public boolean isContinuousAt(Map<Variable,Double> variableMap)
+    {
+    	boolean result = true;
+    	return (result && _exp.isContinuousAt(variableMap));
+    }
+    
+    public String unParse()
+    {
+    	String str = "(square(" + _exp.unParse() + "))";
+    	return str;
+    }
+    
+    public String toWolf()
+    {
+    	String str = "(" + _exp.toWolf() + "^2)";
+    	return str;
+    }
+
 	@Override
 	public Expression getNextExpression() {
 		// TODO Auto-generated method stub
 		return _exp;
-	}  
+	}
 }
