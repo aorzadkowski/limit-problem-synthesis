@@ -399,6 +399,11 @@ public class Parser
 					Expression pop1 = exStack.pop();
 					exStack.push(new UnaryCos(pop1));
 				}
+				else if(current.getData().equalsIgnoreCase("cbrt"))
+				{
+					Expression pop1 = exStack.pop();
+					exStack.push(new UnaryCubeRoot(pop1));
+				}
 				else if(current.getData().equalsIgnoreCase("ln"))
 				{
 					Expression pop1 = exStack.pop();
