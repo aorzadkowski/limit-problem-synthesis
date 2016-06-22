@@ -1,96 +1,86 @@
-//Class which represents an multiplicative inverse value of an expression.
-//Requires only 1 expression
 package hierarchy;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-public class UnaryReciprocal implements UnaryOperator {
-
-    private Expression _exp = null;
-    private int _locationRelativeToPreviousOperator = -1;
+public class UnaryCubeRoot implements Expression, UnaryOperator {
+	
+	private Expression _exp = null;
+	private int _locationRelativeToPreviousOperator = -1;
     private Expression _previousOperator = null;
-    
-    public UnaryReciprocal(Expression e)
-    {
-        _exp = e;
-        _exp.setLocationRelativeToPreviousOperator(0);
+	
+	public UnaryCubeRoot(Expression anExp)
+	{
+		_exp = anExp;
+		_exp.setLocationRelativeToPreviousOperator(0);
         _exp.setPreviousOperator(this);
-    }
+	}
+
+	@Override
+	public Expression getExp() {
+		return _exp;
+	}
+
+	@Override
+	public void setExp(Expression anExp) {
+		_exp = anExp;
+		_exp.setLocationRelativeToPreviousOperator(0);
+    	_exp.setPreviousOperator(this);
+	}
+
+	@Override
+	public double evaluate(Map<Variable, Double> variableMap) 
+	{
+		if(_exp == null) throw new IllegalArgumentException("This CubeRoot has not been initialized");
         
-    public double evaluate(Map<Variable,Double> variableMap) throws IllegalArgumentException
-    {
-        if(_exp == null) throw new IllegalArgumentException("This Reciprocal has not been initialized");
-        
-        return 1/(_exp.evaluate(variableMap));
-    }
-    public void append(Expression e)
-    {
-        _exp = e;
-    }
-    
-    @Override
-    public boolean isContinuousAt(Map<Variable,Double> variableMap)
-    {
-    	boolean result = true;
-    	if(_exp.evaluate(variableMap) == 0)
-    	{
-    		result = false;
-    	}
+        return Math.cbrt(_exp.evaluate(variableMap));
+	}
+
+	@Override
+	public boolean isContinuousAt(Map<Variable, Double> variableMap) {
+		boolean result = true;
     	return (result && _exp.isContinuousAt(variableMap));
-    }
-    
-    public String unParse()
-    {
-    	String str = "(reciprocal("+  _exp.unParse() + "))";
+	}
+
+	@Override
+	public String toWolf() {
+		String str = "(CubeRoot[" + _exp.toWolf() + "])";
     	return str;
-    }
-    
-    public String toWolf()
-    {
-    	String str = "(1/" + _exp.toWolf() + ")";
+	}
+
+	@Override
+	public String unParse() {
+    	String str = "(cbrt(" + _exp.unParse() + "))";
     	return str;
-    }
-    
-    public String getClassName()
-    {
-    	return "UnaryReciprocal";
-    }
-    
-    public int size()
-    {
-    	return 1 + _exp.size();
-    }
-    
-    public String getExpType()
-    {
-    	return "Unary";
-    }
-    
-    public Expression getExp()
-    {
-    	return _exp;
-    }
-    
-    public void setExp(Expression anExp)
-    {
-    	_exp = anExp;
-    	_exp.setLocationRelativeToPreviousOperator(0);
-        _exp.setPreviousOperator(this);
-    }
-    
-    public ArrayList<Expression> toPreOrderAL()
-    {
-    	_exp.setLocationRelativeToPreviousOperator(0);
-        _exp.setPreviousOperator(this);
-    	ArrayList<Expression> result = new ArrayList<Expression>();
-    	result.add(this);
-    	result.addAll(_exp.toPreOrderAL());
-    	return result;
-    }
-    
-    public void setPreviousOperator(Expression e)
+	}
+
+	@Override
+	public String getClassName() {
+		return "CubeRoot";
+	}
+
+	@Override
+	public int size() {
+		return 1 + _exp.size();
+	}
+
+	@Override
+	public String getExpType() {
+		return "Unary";
+	}
+
+	@Override
+	public ArrayList<Expression> toPreOrderAL() {
+		_exp.setLocationRelativeToPreviousOperator(0);
+    	_exp.setPreviousOperator(this);
+		ArrayList<Expression> result = new ArrayList<Expression>();
+		result.add(this);
+		result.addAll(_exp.toPreOrderAL());
+		return result;
+	}
+	
+	public void setPreviousOperator(Expression e)
     {
     	_previousOperator = e;
     }
@@ -522,4 +512,5 @@ public class UnaryReciprocal implements UnaryOperator {
 		//continue recursive path
 		_exp.mutateExpressionOf(limExp);
     }
+
 }

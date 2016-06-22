@@ -6,6 +6,6 @@ import java.util.Map;
 public interface UnaryOperator extends Expression
 {
     public double evaluate(Map<Variable,Double> variableMap);
-    public void append(Expression e);
-	public Expression getNextExpression();
+    public Expression getExp();//these 2 methods set/get the member expressions of this Unary Operator.
+    public void setExp(Expression anExp);
 }
