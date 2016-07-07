@@ -6,7 +6,9 @@ import java.util.Map;
 public interface BinaryOperator extends Expression    
 {
     public double evaluate(Map<Variable,Double> variableMap);
-    public void append(Expression e);
-	public Expression getLeftExpression();
-	public Expression getRightExpression();
+    public Expression getExp1();//these 4 methods set/return the member Expressions of this BinaryOperator.
+    public Expression getExp2();
+    public void setExp1(Expression anExp);
+    public void setExp2(Expression anExp);
+    public boolean equals(Expression other);
 }

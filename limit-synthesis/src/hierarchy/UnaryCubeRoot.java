@@ -1,92 +1,86 @@
-//Class which represents an expression.
-//Requires only 1 expression
 package hierarchy;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-public class UnaryPlus implements UnaryOperator {
-
-    private Expression _exp = null;
-    private int _locationRelativeToPreviousOperator = -1;
+public class UnaryCubeRoot implements Expression, UnaryOperator {
+	
+	private Expression _exp = null;
+	private int _locationRelativeToPreviousOperator = -1;
     private Expression _previousOperator = null;
-    
-    public UnaryPlus(Expression e)
-    {
-        _exp = e;
-        _exp.setLocationRelativeToPreviousOperator(0);
+	
+	public UnaryCubeRoot(Expression anExp)
+	{
+		_exp = anExp;
+		_exp.setLocationRelativeToPreviousOperator(0);
         _exp.setPreviousOperator(this);
-    }
+	}
+
+	@Override
+	public Expression getExp() {
+		return _exp;
+	}
+
+	@Override
+	public void setExp(Expression anExp) {
+		_exp = anExp;
+		_exp.setLocationRelativeToPreviousOperator(0);
+    	_exp.setPreviousOperator(this);
+	}
+
+	@Override
+	public double evaluate(Map<Variable, Double> variableMap) 
+	{
+		if(_exp == null) throw new IllegalArgumentException("This CubeRoot has not been initialized");
         
-    public double evaluate(Map<Variable,Double> variableMap) throws IllegalArgumentException
-    {
-        if(_exp == null) throw new IllegalArgumentException("This UnaryPlus has not been initialized");
-        
-        return (_exp.evaluate(variableMap));
-    }
-    public void append(Expression e)
-    {
-        _exp = e;
-    }
-    
-    @Override
-    public boolean isContinuousAt(Map<Variable,Double> variableMap)
-    {
-    	boolean result = true;
+        return Math.cbrt(_exp.evaluate(variableMap));
+	}
+
+	@Override
+	public boolean isContinuousAt(Map<Variable, Double> variableMap) {
+		boolean result = true;
     	return (result && _exp.isContinuousAt(variableMap));
-    }
-    
-    public String unParse()
-    {
-    	String str = "(" + _exp.unParse() + ")";
+	}
+
+	@Override
+	public String toWolf() {
+		String str = "(CubeRoot[" + _exp.toWolf() + "])";
     	return str;
-    }
-    
-    public String toWolf()
-    {
-    	String str = _exp.toWolf();
+	}
+
+	@Override
+	public String unParse() {
+    	String str = "(cbrt(" + _exp.unParse() + "))";
     	return str;
-    }
-    
-    public String getClassName()
-    {
-    	return "UnaryPlus";
-    }
-    
-    public int size()
-    {
-    	return 1 + _exp.size();
-    }
-    
-    public String getExpType()
-    {
-    	return "Unary";
-    }
-    
-    public Expression getExp()
-    {
-    	return _exp;
-    }
-    
-    public void setExp(Expression anExp)
-    {
-    	_exp = anExp;
-    	_exp.setLocationRelativeToPreviousOperator(0);
-        _exp.setPreviousOperator(this);
-    }
-    
-    public ArrayList<Expression> toPreOrderAL()
-    {
-    	_exp.setLocationRelativeToPreviousOperator(0);
-        _exp.setPreviousOperator(this);
-    	ArrayList<Expression> result = new ArrayList<Expression>();
-    	result.add(this);
-    	result.addAll(_exp.toPreOrderAL());
-    	return result;
-    }
-    
-    public void setPreviousOperator(Expression e)
+	}
+
+	@Override
+	public String getClassName() {
+		return "CubeRoot";
+	}
+
+	@Override
+	public int size() {
+		return 1 + _exp.size();
+	}
+
+	@Override
+	public String getExpType() {
+		return "Unary";
+	}
+
+	@Override
+	public ArrayList<Expression> toPreOrderAL() {
+		_exp.setLocationRelativeToPreviousOperator(0);
+    	_exp.setPreviousOperator(this);
+		ArrayList<Expression> result = new ArrayList<Expression>();
+		result.add(this);
+		result.addAll(_exp.toPreOrderAL());
+		return result;
+	}
+	
+	public void setPreviousOperator(Expression e)
     {
     	_previousOperator = e;
     }
@@ -518,12 +512,12 @@ public class UnaryPlus implements UnaryOperator {
 		//continue recursive path
 		_exp.mutateExpressionOf(limExp);
     }
-
     
     public boolean equals(Expression other) {
     	if (other == null) return false;
-    	if (!(other instanceof UnaryPlus)) return false;
+    	if (!(other instanceof UnaryCubeRoot)) return false;
     	if (other.equals(_exp)) return true;
     	return false;
     }
+
 }

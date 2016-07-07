@@ -32,10 +32,10 @@ public class TreeAnalysis {
 		}
 		
 		if (node instanceof BinaryOperator) {
-			readExpression(((BinaryOperator) node).getLeftExpression());
-			readExpression(((BinaryOperator) node).getRightExpression());
+			readExpression(((BinaryOperator) node).getExp1());
+			readExpression(((BinaryOperator) node).getExp2());
 		} else if (node instanceof UnaryOperator) {
-			readExpression(((UnaryOperator) node).getNextExpression());
+			readExpression(((UnaryOperator) node).getExp());
 		} else if (node instanceof Variable || node instanceof hierarchy.Number) {
 			return; //Let's be verbose. 
 		}
@@ -54,11 +54,11 @@ public class TreeAnalysis {
 		if (node == null) {
 			return 0;
 		} else if (node instanceof BinaryOperator){
-			int left = getHeight(((BinaryOperator) node).getLeftExpression());
-			int right = getHeight(((BinaryOperator) node).getRightExpression());
+			int left = getHeight(((BinaryOperator) node).getExp1());
+			int right = getHeight(((BinaryOperator) node).getExp2());
 			return 1 + (left > right ? left : right);
 		} else if (node instanceof UnaryOperator){
-			return 1 + getHeight(((UnaryOperator) node).getNextExpression());
+			return 1 + getHeight(((UnaryOperator) node).getExp());
 		} else {
 			return 1;
 		}
@@ -83,10 +83,10 @@ public class TreeAnalysis {
 			while(levelNodes>0){
 				Expression n = (Expression)q.remove();
 				if (n instanceof UnaryOperator) {
-					if (((UnaryOperator)n).getNextExpression() != null) q.add(((UnaryOperator)n).getNextExpression());
+					if (((UnaryOperator)n).getExp() != null) q.add(((UnaryOperator)n).getExp());
 				} else if (n instanceof BinaryOperator) {
-					if(((BinaryOperator)n).getLeftExpression()!=null) q.add(((BinaryOperator)n).getLeftExpression());
-					if(((BinaryOperator)n).getRightExpression()!=null) q.add(((BinaryOperator)n).getRightExpression());
+					if(((BinaryOperator)n).getExp1()!=null) q.add(((BinaryOperator)n).getExp1());
+					if(((BinaryOperator)n).getExp2()!=null) q.add(((BinaryOperator)n).getExp2());
 				}
 				levelNodes--;
 			}
@@ -102,9 +102,9 @@ public class TreeAnalysis {
 		if (node == null || (!(node instanceof BinaryOperator) && !(node instanceof UnaryOperator))) {
 			return 0;
 		} else if (node instanceof BinaryOperator) {
-			return 1 + countOperators(((BinaryOperator)node).getLeftExpression()) + countOperators(((BinaryOperator)node).getRightExpression());
+			return 1 + countOperators(((BinaryOperator)node).getExp1()) + countOperators(((BinaryOperator)node).getExp2());
 		} else {
-			return 1 + countOperators(((UnaryOperator)node).getNextExpression());
+			return 1 + countOperators(((UnaryOperator)node).getExp());
 		}
 	}
 	
@@ -118,9 +118,9 @@ public class TreeAnalysis {
 		}
 		
 		if (node instanceof BinaryOperator) {
-			return countOperands(((BinaryOperator)node).getLeftExpression()) + countOperands(((BinaryOperator)node).getRightExpression());
+			return countOperands(((BinaryOperator)node).getExp1()) + countOperands(((BinaryOperator)node).getExp2());
 		} else if (node instanceof UnaryOperator) {
-			return countOperands(((UnaryOperator)node).getNextExpression());
+			return countOperands(((UnaryOperator)node).getExp());
 		} else /* if (node instanceof Variable || node instanceof Number) */ {
 			return 1;
 		}

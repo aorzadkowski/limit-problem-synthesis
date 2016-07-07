@@ -4,6 +4,7 @@
 
 package hierarchy;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class UnaryPosIntPowers implements UnaryOperator {
@@ -52,9 +53,76 @@ public class UnaryPosIntPowers implements UnaryOperator {
 	}
 
 	@Override
-	public Expression getNextExpression() {
+	public String getClassName() {
 		// TODO Auto-generated method stub
-		return _exp;
+		return null;
 	}
+
+	@Override
+	public int size() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getExpType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<Expression> toPreOrderAL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPreviousOperator(Expression e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Expression getPreviousOperator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLocationRelativeToPreviousOperator(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getLocationRelativeToPreviousOperator() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void mutateExpressionOf(LimitExpression limExp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Expression getExp() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setExp(Expression anExp) {
+		// TODO Auto-generated method stub
+		
+	}
+
     
+    public boolean equals(Expression other) {
+    	if (other == null) return false;
+    	if (!(other instanceof UnaryPosIntPowers)) return false;
+    	if (other.equals(_exp)) return true;
+    	return false;
+    }
 }

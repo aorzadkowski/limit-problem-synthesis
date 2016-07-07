@@ -94,6 +94,15 @@ public class Driver
         System.out.println(b5.unParse());
         System.out.println(b5.isContinuousAt(variableMap));
         System.out.println("b5 = " + b5.evaluate(variableMap));
+        
+        ///////////////////TEST.5
+        
+        Expression aTraversable = new UnarySin(new BinaryPlus(new Variable("x"), new Number(Math.PI)));
+        ArrayList<Expression> preOrderAL = aTraversable.toPreOrderAL();
+        for(Expression exp: preOrderAL)
+        {
+        	System.out.println(exp.toWolf());
+        }
       
         
 //************************************TEST1         
