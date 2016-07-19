@@ -519,5 +519,9 @@ public class UnaryCubeRoot implements Expression, UnaryOperator {
     	if (other.equals(_exp)) return true;
     	return false;
     }
-
+    @Override
+	public String getExpressionString() {
+		
+		return "CubeRoot";
+	}
 }

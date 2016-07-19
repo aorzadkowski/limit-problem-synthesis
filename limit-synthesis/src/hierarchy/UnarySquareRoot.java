@@ -529,5 +529,9 @@ public class UnarySquareRoot implements UnaryOperator {
     	if (!(other instanceof UnarySquareRoot)) return false;
     	if (other.equals(_exp)) return true;
     	return false;
-    }
+    }@Override
+	public String getExpressionString() {
+		
+		return "SquareRoot";
+	}
 }

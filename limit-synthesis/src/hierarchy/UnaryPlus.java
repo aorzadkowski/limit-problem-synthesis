@@ -525,5 +525,9 @@ public class UnaryPlus implements UnaryOperator {
     	if (!(other instanceof UnaryPlus)) return false;
     	if (other.equals(_exp)) return true;
     	return false;
-    }
+    }@Override
+	public String getExpressionString() {
+		
+		return "Positive";
+	}
 }

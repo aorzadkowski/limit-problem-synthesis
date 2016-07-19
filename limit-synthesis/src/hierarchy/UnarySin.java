@@ -529,5 +529,9 @@ public class UnarySin implements UnaryOperator {
     	if (!(other instanceof UnarySin)) return false;
     	if (other.equals(_exp)) return true;
     	return false;
-    }
+    }@Override
+	public String getExpressionString() {
+		
+		return "sin";
+	}
 }

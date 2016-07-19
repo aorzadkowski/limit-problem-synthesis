@@ -524,5 +524,9 @@ public class UnarySquared implements UnaryOperator {
     	if (!(other instanceof UnarySquared)) return false;
     	if (other.equals(_exp)) return true;
     	return false;
-    }
+    }@Override
+	public String getExpressionString() {
+		
+		return "^2";
+	}
 }

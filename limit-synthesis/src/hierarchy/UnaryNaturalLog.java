@@ -528,5 +528,9 @@ public class UnaryNaturalLog implements UnaryOperator {
     	if (!(other instanceof UnaryNaturalLog)) return false;
     	if (other.equals(_exp)) return true;
     	return false;
-    }
+    }@Override
+	public String getExpressionString() {
+		
+		return "ln";
+	}
 }

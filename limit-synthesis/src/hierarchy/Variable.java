@@ -437,5 +437,9 @@ public class Variable implements Expression
     	if (!(other instanceof Variable)) return false;
     	if (((Variable)other).getName().equals(_name)) return true;
     	return false;
-    }
+    }@Override
+	public String getExpressionString() {
+		
+		return _name;
+	}
 }

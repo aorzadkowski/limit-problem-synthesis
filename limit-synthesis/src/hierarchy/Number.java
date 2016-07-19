@@ -446,4 +446,9 @@ public class Number implements Expression
     	if (other.evaluate(null) == _num) return true;
     	return false;
     }
+    @Override
+	public String getExpressionString() {
+		
+		return "" + _num;
+	}
 }

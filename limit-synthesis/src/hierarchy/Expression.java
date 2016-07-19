@@ -43,4 +43,5 @@ public interface Expression
     																//After mutating this Expression, this method mutates any
     																//member expressions as well. 
     public abstract boolean equals(Expression other);
+    public abstract String getExpressionString();
 }

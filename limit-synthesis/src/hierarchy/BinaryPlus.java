@@ -554,4 +554,9 @@ public class BinaryPlus implements BinaryOperator {
     	}
     	return false;
     }
+    @Override
+	public String getExpressionString() {
+		
+		return "+";
+	}
 }

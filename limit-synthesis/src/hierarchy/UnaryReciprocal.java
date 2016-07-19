@@ -529,5 +529,9 @@ public class UnaryReciprocal implements UnaryOperator {
     	if (!(other instanceof UnaryReciprocal)) return false;
     	if (other.equals(_exp)) return true;
     	return false;
-    }
+    }@Override
+	public String getExpressionString() {
+		
+		return "reciprocal";
+	}
 }

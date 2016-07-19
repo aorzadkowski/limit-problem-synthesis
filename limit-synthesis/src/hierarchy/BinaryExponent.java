@@ -568,4 +568,10 @@ public class BinaryExponent implements Expression, BinaryOperator
     	}
     	return false;
     }
+    
+    @Override
+	public String getExpressionString() {
+		
+		return "^";
+	}
 }

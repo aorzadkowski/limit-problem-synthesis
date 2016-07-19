@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import crossover.Crossover;
 import lexerAndParser.*;
 import hierarchy.*;
 
@@ -97,6 +98,18 @@ public class DriverGenAlg
     		
     		LimitExpressionPopulation originalPopulation = new LimitExpressionPopulation(LimitExpressionList);
     		
+    		System.out.println("We will test crossover.\n");
+    		
+    		Expression random1 = originalPopulation.getIndividual((int)(Math.random() * originalPopulation.size())).getFunction();
+    		Expression random2 = originalPopulation.getIndividual((int)(Math.random() * originalPopulation.size())).getFunction();
+    		
+    		Expression crossover = Crossover.crossover(random1, random2);
+    		
+    		System.out.println("A: " + random1.unParse());
+    		System.out.println("B: " + random2.unParse());
+    		System.out.println("C: " + crossover.unParse());
+    		
+    		
     		System.out.println("Figures messed with and what they should be: maxSize = 20, minSize = 2, MutationRate = .015, expansionRate = .33, regressionRate = .66");
     		int generationNumber = 1;
     		while(generationNumber < 101)
@@ -115,14 +128,14 @@ public class DriverGenAlg
                 } else {
                     elitismOffset = 0;
                 }
-//                // Loop over the population size and create new individuals with
-//                // crossover
-//                for (int i = elitismOffset; i < pop.size(); i++) {
-//                    Individual indiv1 = tournamentSelection(pop);
-//                    Individual indiv2 = tournamentSelection(pop);
-//                    Individual newIndiv = crossover(indiv1, indiv2);
-//                    newPopulation.saveIndividual(i, newIndiv);
-//                }
+                // Loop over the population size and create new individuals with
+                // crossover
+                //for (int i = elitismOffset; i < originalPopulation.size(); i++) {
+                //    Individual indiv1 = tournamentSelection(pop);
+                //    Individual indiv2 = tournamentSelection(pop);
+                //    Individual newIndiv = crossover(indiv1, indiv2);
+                //    newPopulation.saveIndividual(i, newIndiv);
+                //}
 
                 // Mutate population
                 for (int i = elitismOffset; i < originalPopulation.size(); i++) 
@@ -132,7 +145,7 @@ public class DriverGenAlg
 
                 bufferedWriter.write("Here is generation " + generationNumber);
                 bufferedWriter.newLine();
-                for (int i = 0; i < originalPopulation.size(); i++) 
+                for (int i = 0; i < originalPopulation.size(); i++)
                 {
                     bufferedWriter.write(originalPopulation.getIndividual(i).unParse());
                     bufferedWriter.newLine();

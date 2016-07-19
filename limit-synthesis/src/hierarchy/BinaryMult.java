@@ -552,4 +552,9 @@ public class BinaryMult implements BinaryOperator
     	}
     	return false;
     }
+    @Override
+	public String getExpressionString() {
+		
+		return "*";
+	}
 }

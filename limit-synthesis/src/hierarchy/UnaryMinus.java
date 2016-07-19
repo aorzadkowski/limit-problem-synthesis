@@ -524,5 +524,9 @@ public class UnaryMinus implements UnaryOperator {
     	if (!(other instanceof UnaryMinus)) return false;
     	if (other.equals(_exp)) return true;
     	return false;
-    }
+    }@Override
+	public String getExpressionString() {
+		
+		return "Negative";
+	}
 }

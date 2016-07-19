@@ -125,4 +125,10 @@ public class UnaryPosIntPowers implements UnaryOperator {
     	if (other.equals(_exp)) return true;
     	return false;
     }
+    
+    @Override
+	public String getExpressionString() {
+		
+		return "^" + _n;
+	}
 }
