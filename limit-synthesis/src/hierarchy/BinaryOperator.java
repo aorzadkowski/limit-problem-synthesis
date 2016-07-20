@@ -10,5 +10,4 @@ public interface BinaryOperator extends Expression
     public Expression getExp2();
     public void setExp1(Expression anExp);
     public void setExp2(Expression anExp);
-    public boolean equals(Expression other);
 }

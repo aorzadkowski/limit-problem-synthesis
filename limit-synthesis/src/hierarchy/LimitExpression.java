@@ -9,12 +9,13 @@ import geneticAlgorithm.FitnessCalc;
 import java.util.HashMap;
 import java.util.Map;
 import lexerAndParser.*;
+import options.Options;
 import hierarchy.*;
 
 
 public class LimitExpression 
 {
-	private int fitness; //used in the Genetic algorithm.
+	private double fitness; //used in the Genetic algorithm.
 	private int _LRB; //Whether this limit expression is a left-handed(1), right-handed(-1), or both(0);
 	private final int LEFT = 1;
 	private final int RIGHT = -1;
@@ -24,6 +25,8 @@ public class LimitExpression
 	private Expression _target; //the target value;
 	
 	private Expression _function; //the function.
+	private String _stringRepresentation = ""; //only created when using the overloaded constructor.
+												//This represents the limit notation. "lim _variable>_LRB _target "
 	
 	public LimitExpression()
 	{
@@ -37,6 +40,7 @@ public class LimitExpression
 	{
 		//The stringRepresentation should be in the following format:
 		//lim _variable>_LRB _target _function
+		_stringRepresentation = stringRepresentation;
 		
 		//A variable, by our definition, is one alphabetical character.
 		_variable = new Variable(stringRepresentation.substring(4, 5));
@@ -68,7 +72,27 @@ public class LimitExpression
 			Parser LEParser = new Parser();
 			ArrayList<Lexer.Token> LELOutput= LELexer.lex(targetString);
 			Expression exp = LEParser.parse(LELOutput);
-			//System.out.println("Here is the target Expression " + exp.unParse());
+//			try
+//			{
+//				exp = LEParser.parse(LELOutput);
+//			}
+//			catch(Exception e)
+//			{
+//				
+//				e.printStackTrace();
+//				System.out.println(targetString);
+//				
+//				
+//				targetString = stringRepresentation.substring(7, stringRepresentation.indexOf('(') -1);
+//				LELOutput= LELexer.lex(targetString);
+//				exp = LEParser.parse(LELOutput);
+//				
+//				e.printStackTrace();
+//				System.out.println(targetString);
+//				System.out.println("Here is the target Expression " + exp.unParse());
+//			}
+			
+			
 			_target = exp;
 		}
 		else
@@ -78,6 +102,20 @@ public class LimitExpression
 			Parser LEParser = new Parser();
 			ArrayList<Lexer.Token> LELOutput= LELexer.lex(targetString);
 			Expression exp = LEParser.parse(LELOutput);
+//			try
+//			{
+//				exp = 
+//			}
+//			catch(Exception e)
+//			{
+//				targetString = stringRepresentation.substring(8, stringRepresentation.indexOf('(') -1);
+//				LELOutput= LELexer.lex(targetString);
+//				exp = LEParser.parse(LELOutput);
+//				
+//				e.printStackTrace();
+//				System.out.println(targetString);
+//				System.out.println("Here is the target Expression " + exp.unParse());
+//			}
 			//System.out.println("Here is the target Expression " + exp.unParse());
 			_target = exp;
 		}
@@ -101,6 +139,17 @@ public class LimitExpression
 			return true;
 		}
 		return false;
+	}
+	
+	public LimitExpression(LimitExpression limExp)
+	{
+		_variable = new Variable(limExp.getVariable().getName());
+		Expression afunction = limExp.getFunction().deepCopy();
+		_function = afunction;
+		Expression aTarget = limExp.getTarget().deepCopy();
+		_target = aTarget;
+		int anLRB = limExp.getLRB();
+		_LRB = anLRB;
 	}
 	
 	public boolean isContinuousAtTarget()
@@ -237,6 +286,16 @@ public class LimitExpression
 		return _target.evaluate(m);
 	}
 	
+	public Expression getTarget()
+	{
+		return _target;
+	}
+	
+	public int getLRB()
+	{
+		return _LRB;
+	}
+	
 	public Expression getFunction()
 	{
 		return _function;
@@ -245,6 +304,24 @@ public class LimitExpression
 	public void setFunction(Expression e)
 	{
 		_function = e;
+	}
+	
+	public String getStringRepresentation()
+	{
+		if(_LRB == BOTH)
+		{
+			_stringRepresentation = "lim " + _variable.unParse() + "> " + _target.unParse() + " "; 
+		}
+		else if(_LRB == LEFT)
+		{
+			_stringRepresentation = "lim " + _variable.unParse() + ">- " + _target.unParse() + " ";
+		}
+		else
+		{
+			_stringRepresentation = "lim " + _variable.unParse() + ">+ " + _target.unParse() + " ";
+		}
+		
+		return _stringRepresentation;
 	}
 		
 	public String unParse()
@@ -271,14 +348,70 @@ public class LimitExpression
 	//*******************************************************
 	
 	//GA individual constants
-	public static final double uniformRate = 0.5;
-	public static final double mutationRate = 0.5;//should be .015
-	public static final double expansionRate = .2; //under normal parameters, how likely is a gene to expand?
-	public static final double regressionRate = .66;//under normal parameters, how likely is a gene to regress?
-	public static final double substitutionRate = 1.0;//............................................. be substituted?
-	public static final int maxSize = 20;
-	public static final int minSize = 6;
-	public static final int maxRegression = 3; //determines how much information can be regressed at a time.
+	public static final double MUTATION_RATE = Options.MUTATION_RATE;//should be .015
+	public static final double EXPANSION_RATE = Options.EXPANSION_RATE; //under normal parameters, how likely is a gene to expand?
+													//should be .2
+	public static final double REGRESSION_RATE = Options.REGRESSION_RATE;//under normal parameters, how likely is a gene to regress?
+													//should be .66
+	public static final double SUBSTITUTION_RATE = Options.SUBSTITUTION_RATE;//............................................. be substituted?
+													//1.0
+	public static final int MAX_SIZE = Options.MAX_SIZE;
+	public static final int MIN_SIZE = Options.MIN_SIZE;
+	public static final int MAX_REGRESSION = Options.MAX_REGRESSION; //determines how much information can be regressed at a time.
+	
+	//simplification cases
+	public static final boolean PROHIBIT_NUM_BO_NUM = Options.PROHIBIT_NUM_BO_NUM; //should be true. Makes the following an invalid case: two Numbers
+																//combined by a BinaryOperator
+																//The cases of e^num, num*#Pi,
+																//#Pi*num, and num/num are not included.
+	public static final boolean PROHIBIT_NUM_BO_X = Options.PROHIBIT_NUM_BO_X;//Marks Expressions like
+																// num^x, num*x,...  as invalid. 
+	public static final boolean PROHIBIT_NUM_BO_EXP = Options.PROHIBIT_NUM_BO_EXP;//Marks Expressions like
+																// 2-(1/2), 3/cbrt(x), 4*absval(-9) as invalid.
+																//num^exp is NOT allowed unless exp is num/num.
+	public static final boolean PROHIBIT_X_BO_NUM = Options.PROHIBIT_X_BO_NUM;//Marks Expressions like
+																//x^2, x*2, x-2... as invalid
+	public static final boolean PROHIBT_X_BO_X = Options.PROHIBIT_X_BO_X;//should be true. Marks Expressions like
+																//x^x, x*x, x-x,... as invalid.
+	public static final boolean PROHIBIT_X_BO_EXP = Options.PROHIBIT_X_BO_EXP;//Marks Expressions like
+																//x-cbrt(x), x*absval(-9),... as invalid.
+																//x^exp is NOT allowed unless the exp is a num/num
+	public static final boolean PROHIBIT_EXP_BO_NUM = Options.PROHIBIT_EXP_BO_NUM;//Marks Expressions like
+																//(cbrt(x)^2, absval(-9)*2 as invalid
+	public static final boolean PROHIBIT_EXP_BO_X= Options.PROHIBIT_EXP_BO_X;//Marks Expressions like
+																//cbrt(x)*x, absval(-9)*x as invalid
+																//exp^x is NOT allowed.
+	public static final boolean PROHIBIT_EXP_BO_EXP= Options.PROHIBIT_EXP_BO_EXP;//Should be true. Marks Expressions like
+																//cbrt(x)*(absval(-9), sin(x)/(Pi/2) to occur
+																//exp^exp is NOT allowed unless the second exp is num/num
+	public static final boolean PROHIBIT_UO_NUM = Options.PROHIBIT_UO_NUM;//should be true. Marks Expressions like
+																//absval(2) as invalid
+																//reciprocal(num) always allowed.
+	public static final boolean PROHIBIT_UO_X = Options.PROHIBIT_UO_X;//Marks Expressions like
+																//absval(x) as invalid
+	public static final boolean PROHIBIT_UO_EXP= Options.PROHIBIT_UO_EXP;//Marks Expressions like
+																//absval(3*x) as invalid
+	
+	//Special cases
+	public static final boolean PROHIBIT_E_TO_THE_NUM = Options.PROHIBIT_E_TO_THE_NUM;//e^num
+	
+	public static final boolean PROHIBIT_NUM_TIMES_PI= Options.PROHIBIT_NUM_TIMES_PI;//num*pi
+	
+	public static final boolean PROHIBIT_PI_TIMES_NUM= Options.PROHIBIT_PI_TIMES_NUM;//pi*num
+	
+	public static final boolean PROHIBIT_NUM_OVER_NUM= Options.PROHIBIT_NUM_OVER_NUM;//num/num (num/pi) (num/e) (e/num)...
+	
+	public static final boolean PROHIBIT_NUM_TO_THE_EXP= Options.PROHIBIT_NUM_TO_THE_EXP;//num^exp ****exp == num/num? Does not include num^(num/num)
+	
+	public static final boolean PROHIBIT_X_TO_THE_EXP= Options.PROHIBIT_X_TO_THE_EXP;//x^exp ****exp == num/num? x^(num/num) is always allowed
+	
+	public static final boolean PROHIBIT_EXP_TO_THE_X= Options.PROHIBIT_EXP_TO_THE_X;//exp^x
+	
+	public static final boolean PROHIBIT_EXP_TO_THE_EXP= Options.PROHIBIT_EXP_TO_THE_EXP;//exp^exp****exp == num/num? exp^(num/num) is always allowed
+	
+	public static final boolean PROHIBIT_RECIPROCAL_NUM= Options.PROHIBIT_RECIPROCAL_NUM;//reciprocal(num)
+	
+
 	
 	//temporary fix
 	public void generateLimitExpression()
@@ -286,11 +419,16 @@ public class LimitExpression
 		Random gen = new Random();
 		_LRB = (gen.nextInt(2) - 1);
 		_variable = new Variable("x");
-		_target = new Number((double)gen.nextInt());
-		_function = new BinaryDivideBy(_variable, _target);
+		_target = new Number(generateNewDouble());
+		_function = new Variable("x");
+		_function.expandExpressionOf(this);
+		_function.expandExpressionOf(this);
+		_function.expandExpressionOf(this);
+		_function.expandExpressionOf(this);
+		_function.expandExpressionOf(this);
 	}
 	
-	public int getFitness()
+	public double getFitness()
 	{
 		if (fitness == 0)
 		{
@@ -306,8 +444,8 @@ public class LimitExpression
 		double newDoub = 0.0;
 		
 		double intWeight = 0.2;
-		double piWeight = 0.4;
-		double eWeight = 0.6;
+		double piWeight = 0.3;
+		double eWeight = 0.4;
 		//double digitWeight = 1.0;
 		
 		Random gen = new Random();

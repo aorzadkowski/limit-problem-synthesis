@@ -2,6 +2,7 @@
 package hierarchy;
 
 import java.util.Map;
+import symbolicSets.*;
 import java.util.*;
 
 public interface Expression 
@@ -23,11 +24,7 @@ public interface Expression
     
     public abstract String getExpType(); //returns Binary, Unary, Number, or Variable, the Expression Type of this object.
     
-    public abstract ArrayList<Expression> toPreOrderAL();//returns an ArrayList of Expressions which is the 
-    														//preOrder representation of the Expression tree.
-    														//For example, calling this method on a tree like “AbsVal(x)/(sin(2)+3)” would return 
-    														//the ArrayList <AbsVal(x)/(sin(2)+3),AbsVal(x),x,(sin(2)+3),sin(2),2,3>.
-    														//calling this method makes all PreviousOperator methods more accurate.
+    public abstract void reReference();//calling this method makes all PreviousOperator methods more accurate.
     
     public abstract void setPreviousOperator(Expression e);//PreviousOperator methods allow us to more easily traverse the tree.
     
@@ -42,6 +39,22 @@ public interface Expression
     																//3 different ways: Expansion, Regression, or Substitution
     																//After mutating this Expression, this method mutates any
     																//member expressions as well. 
+    
+    public abstract void expandExpressionOf(LimitExpression limExp);  //mutateExpressionOf determines which of these three 
+    public abstract void regressExpressionOf(LimitExpression limExp); 		//should be called. 
+    public abstract void substituteExpressionOf(LimitExpression limExp);
+ 
+    public abstract boolean validate(); //returns true if this Expression is a valid case*.
+    								//returns false if this Expression is not a valid case.
+    								
+    								//*Valid cases refer to the trees we want to allow in an individual.
+    								//For example we do not want to allow 2.0 * 2.0 because it can be easily simplified to 4.0.
+    								//See LimitExpression constants for more information.
+    public abstract Expression deepCopy(); //returns a "deepCopy" of this expression. This method traverses the Expression tree.
+    
+    //public abstract IntervalSet postfixDetermineDomain(); //returns the domainSet of this Expression. This method traverses
+    														//this Expression tree in postfix.
+    
     public abstract boolean equals(Expression other);
     public abstract String getExpressionString();
 }
