@@ -94,7 +94,7 @@ public class Parser
 				}
 				else if(toke.getType().equals(Lexer.TokenType.NEGATIVENUMBER) )
 				{
-					if(previousToken.getType().equals(TokenType.NEGATIVENUMBER) || previousToken.getType().equals(TokenType.NUMBER) || previousToken.getType().equals(TokenType.VARIABLE) || previousToken.getType().equals(TokenType.CLOSEPAREN) )
+					if(previousToken.getType().equals(TokenType.NEGATIVENUMBER) || previousToken.getType().equals(TokenType.NUMBER) || previousToken.getType().equals(TokenType.VARIABLE) || previousToken.getType().equals(TokenType.CLOSEPAREN) || previousToken.getType().equals(TokenType.E) || previousToken.getType().equals(TokenType.PI) )
 					{
 						//deals with subtraction vs negative ambiguity
 						Lexer.Token positiveNumber = new Lexer.Token(TokenType.NUMBER, toke.getData().substring(1, toke.getData().length()));
@@ -293,10 +293,11 @@ public class Parser
 			}
 		}
 		
-		
+		//System.out.println();
 		while(!postfix.isEmpty())
 		{
 			Lexer.Token current = postfix.poll();
+			//System.out.print(current.getData().toString() + " ");
 			
 			if(current.getType().equals(TokenType.NUMBER))
 			{
@@ -470,7 +471,8 @@ public class Parser
 		}
 		if(!exStack.isEmpty())
 		{
-			System.err.println("SOMEHOW THERE IS STILL SOMETHING IN EXSTACK");
+			System.out.println(exStack.pop().unParse());
+			throw new IllegalArgumentException("SOMEHOW THERE IS STILL SOMETHING IN EXSTACK");
 		}
 		
 		//now to create a limit out of this Expression

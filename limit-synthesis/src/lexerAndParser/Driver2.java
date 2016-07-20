@@ -120,8 +120,6 @@ public class Driver2
 		}
 		
 		
-		
-		
 		//Questions:
 		//test.5														X
 		//set/get/append/traverse/Exptype								X
