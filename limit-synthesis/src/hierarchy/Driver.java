@@ -97,12 +97,7 @@ public class Driver
         
         ///////////////////TEST.5
         
-        Expression aTraversable = new UnarySin(new BinaryPlus(new Variable("x"), new Number(Math.PI)));
-        ArrayList<Expression> preOrderAL = aTraversable.toPreOrderAL();
-        for(Expression exp: preOrderAL)
-        {
-        	System.out.println(exp.toWolf());
-        }
+        
       
         
 //************************************TEST1         
