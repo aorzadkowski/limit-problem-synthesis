@@ -3,6 +3,7 @@ package hierarchy;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Set;
 
 import geneticAlgorithm.FitnessCalc;
 
@@ -20,6 +21,8 @@ public class LimitExpression
 	private final int RIGHT = -1;
 	private final int BOTH = 0;
 	
+	private HashMap<Expression, Integer> depthMap;
+	
 	private Variable _variable; //the variable which approaches the target value;
 	private Expression _target; //the target value;
 	
@@ -31,6 +34,15 @@ public class LimitExpression
 		_variable = (Variable)null;
 		_target = (Expression)null;
 		_function = (Expression)null;
+	}
+	
+	public LimitExpression(int lrb, Variable var, Expression target, Expression function) {
+		_LRB = lrb;
+		_variable = var;
+		_target = target;
+		_function = function;
+		
+		initializeDepthMap();
 	}
 	
 	public LimitExpression(String stringRepresentation, Expression aFunction)
@@ -82,6 +94,16 @@ public class LimitExpression
 			_target = exp;
 		}
 		_function = aFunction;		
+
+		initializeDepthMap();
+	}
+	
+	public int getLRB() {
+		return _LRB;
+	}
+	
+	public Expression getTarget() {
+		return _target;
 	}
 	
 	//Evaluates this limit expression without the limit
@@ -991,6 +1013,100 @@ public class LimitExpression
 	{
 		_function.mutateExpressionOf(this);
 	}
+	////////////////////////////////////////////////////////
+	//////////All map related methods start here.///////////
+	////////////////////////////////////////////////////////
+	public void initializeDepthMap() {
+		initializeDepthMap(_function, 0);
+	}
 	
+	private void initializeDepthMap(Expression node, int depth) {
+		depthMap.put(node, depth);
+		if (node instanceof UnaryOperator) {
+			if (((UnaryOperator) node).getExp() != null) {
+				initializeDepthMap(((UnaryOperator) node).getExp(), depth + 1);
+			}
+		} else if (node instanceof BinaryOperator) {
+			if (((BinaryOperator) node).getExp1() != null) {
+				initializeDepthMap(((BinaryOperator) node).getExp1(), depth + 1);
+			}
+			if (((BinaryOperator) node).getExp2() != null) {
+				initializeDepthMap(((BinaryOperator) node).getExp2(), depth + 1);
+			}
+		}
+	}
 	
+	public void updateMap() {
+		initializeDepthMap();
+	}
+	
+	public ArrayList<Expression> getAllLeaves() {
+		ArrayList<Expression> list = new ArrayList<>();
+		
+		Expression[] keys = (Expression[]) depthMap.keySet().toArray();
+		
+		for (Expression exp : keys) {
+			if (exp instanceof Variable || exp instanceof Number) 
+				list.add(exp);
+		}
+		
+		return list;
+	}
+	
+	private ArrayList<Expression> getAllNodes() {
+		ArrayList<Expression> list = new ArrayList<>();
+		
+		Expression[] keys = (Expression[]) depthMap.keySet().toArray();
+		
+		for (Expression exp : keys) {
+			list.add(exp);
+		}
+		
+		return list;
+	}
+	
+	public Expression getLeafWithShortestPath() {
+		ArrayList<Expression> leaves = getAllLeaves();
+		
+		Expression temp = leaves.get(0);
+		
+		for (Expression leaf : leaves) {
+			if (depthMap.get(leaf).intValue() < depthMap.get(temp).intValue()) 
+				temp = leaf;
+		}
+		
+		return temp;
+	}
+	
+	public Expression getLeafWithLongestPath() {
+		ArrayList<Expression> leaves = getAllLeaves();
+		
+		Expression temp = leaves.get(0);
+		
+		for (Expression leaf : leaves) {
+			if (depthMap.get(leaf).intValue() > depthMap.get(temp).intValue()) 
+				temp = leaf;
+		}
+		
+		return temp;
+	}
+	
+	public int getLengthOfShortestPath() {
+		return depthMap.get(getLeafWithShortestPath()).intValue();
+	}
+	
+	public int getLengthOfLongestPath() {
+		return depthMap.get(getLeafWithLongestPath()).intValue();
+	}
+	
+	public Expression getRandomLeaf() {
+		ArrayList<Expression> leaves = getAllLeaves();
+		return leaves.get((int)(Math.random() * leaves.size()));
+	}
+	
+	public Expression getRandomNode() {
+		ArrayList<Expression> list = getAllNodes();
+		
+		return list.get((int)(Math.random() * list.size()));
+	}
 }

@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import hierarchy.BinaryOperator;
 import hierarchy.Expression;
+import hierarchy.LimitExpression;
 import hierarchy.UnaryOperator;
 import hierarchy.Variable;
 
@@ -16,6 +17,57 @@ public class Crossover {
 	private static final int MAXIMUM_DIFFERENCE_BETWEEN_PATHS = 2;
 
 	
+	public static LimitExpression crossover(LimitExpression a, LimitExpression b) {
+		Expression chosenCrossoverNode;
+		Expression crossoverSubtreeNode;
+		
+		chosenCrossoverNode = chooseCrossoverNode(a);
+		
+		int dLength = a.getLengthOfLongestPath() - a.getLengthOfShortestPath();
+		
+		crossoverSubtreeNode = chooseCrossoverSubtree(b, dLength);
+		
+		Expression parentNode = chosenCrossoverNode.getPreviousOperator();
+		
+		if (parentNode instanceof BinaryOperator) {
+			if (((BinaryOperator)parentNode).getExp1().equals(chosenCrossoverNode))
+				((BinaryOperator)parentNode).setExp1(crossoverSubtreeNode);
+			else
+				((BinaryOperator)parentNode).setExp2(crossoverSubtreeNode);
+		} else {
+			((UnaryOperator)parentNode).setExp(crossoverSubtreeNode);
+		}
+		
+		LimitExpression newExpression = new LimitExpression(a.getLRB(), a.getVariable(), a.getTarget(), getRootOf(parentNode));
+		
+		return newExpression;
+	}
+	
+	private static Expression chooseCrossoverNode(LimitExpression a) {
+		if (REPLACE_LEAVES) {
+			if (BALANCED)
+				return a.getLeafWithShortestPath();
+			else 
+				return a.getRandomLeaf();
+		} else {
+			return a.getRandomNode();
+		}
+	}
+	
+	private static Expression chooseCrossoverSubtree(LimitExpression b, int dLength) {
+		if (BALANCED) {
+			return getSubtreeOfLength(b.getFunction(), dLength);
+		} else {
+			return b.getRandomNode();
+		}
+	}
+	
+	/**
+	 * Depreciated
+	 * @param a
+	 * @param b
+	 * @return new expression representing child of a and b
+	 */
 	public static Expression crossover(Expression a, Expression b) {
 		//Expression nodeToSwitch = randomNode(a);
 		
@@ -41,9 +93,6 @@ public class Crossover {
 		
 		Expression parentNode = chosenCrossoverNode.getPreviousOperator();
 		
-		System.out.println(crossoverSubtreeNode.unParse());
-		System.out.println(chosenCrossoverNode.unParse());
-		System.out.println(parentNode.unParse());
 		
 		if (parentNode instanceof BinaryOperator) {
 			if (((BinaryOperator)parentNode).getExp1().equals(chosenCrossoverNode))
