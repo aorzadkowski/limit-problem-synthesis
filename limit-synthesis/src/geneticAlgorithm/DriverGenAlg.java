@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import crossover.Crossover;
+import externalConnection.LocalMathematicaCasInterface;
 import lexerAndParser.*;
 import options.Options;
 import hierarchy.*;
@@ -112,6 +113,10 @@ public class DriverGenAlg
     		
     		
     		System.out.println("Figures messed with and what they should be: tournamentSize = 5, maxSize = 20, minSize = 2, MutationRate = .015");
+
+    		
+ //    		System.out.println("Testing Mathematica Connection:");
+//    		System.out.println(LocalMathematicaCasInterface.getInstance().connection());
     		
     		int generationNumber = 1;
     		while(generationNumber < 101)
@@ -155,15 +160,15 @@ public class DriverGenAlg
                     double roll = Math.random();
                     if (roll< .5)
                     {
-                    	//Expression newExp1 = Crossover.crossover(indiv1.getFunction(), indiv2.getFunction());
-                    	//indiv1.setFunction(newExp1);
+                    	Expression newExp1 = Crossover.crossover(indiv1.getFunction(), indiv2.getFunction());
+                    	indiv1.setFunction(newExp1);
                     	//indiv1.mutateLimitExpression();
                     	newPopulation.saveIndividual(i, indiv1);
                     }
                     else
                     {
-                    	//Expression newExp2 = Crossover.crossover(indiv1.getFunction(), indiv2.getFunction());
-                    	//indiv2.setFunction(newExp2);
+                    	Expression newExp2 = Crossover.crossover(indiv1.getFunction(), indiv2.getFunction());
+                    	indiv2.setFunction(newExp2);
                     	//indiv2.mutateLimitExpression();
                     	newPopulation.saveIndividual(i, indiv2);
                     }
@@ -201,7 +206,11 @@ public class DriverGenAlg
                 for (int i = 0; i < newPopulation.size(); i++) 
                 {
                     bufferedWriter.write(newPopulation.getIndividual(i).getFunction().validate() + " " + newPopulation.getIndividual(i).unParse());
-                    bufferedWriter.newLine();
+                    //bufferedWriter.write("##" +newPopulation.getIndividual(i).getWolframFunctionDomainString());
+                    //bufferedWriter.newLine();
+                    //bufferedWriter.write(newPopulation.getIndividual(i).getWolframFunctionRangeString());
+                	//bufferedWriter.write(LocalMathematicaCasInterface.getInstance().getFunctionDomain(newPopulation.getIndividual(i)));
+                	bufferedWriter.newLine();
                 }
                 bufferedWriter.newLine();
                 bufferedWriter.newLine(); 
@@ -209,7 +218,7 @@ public class DriverGenAlg
                 originalPopulation = newPopulation;
                 
                 System.out.println();
-                System.out.println(originalPopulation.getFittest().getFitness() + "\t" + originalPopulation.getFittest().unParse());
+                System.out.println(originalPopulation.getFittest().getFitness() + "\t" + originalPopulation.getFittest().translateToWolfram());
                 generationNumber++;
     		}
     		
