@@ -81,6 +81,8 @@ public class Options
   	public static boolean PROHIBIT_EXP_TO_THE_EXP= true;//exp^exp... exp^(num/num) is always allowed
   	
   	public static boolean PROHIBIT_RECIPROCAL_NUM= true;//reciprocal(num)
+  	
+  	public static String MATHEMATICA_PATH = "C:\\Program Files\\Wolfram Research\\Mathematica\\10.4\\MathKernel.exe";
     
   	
   	
