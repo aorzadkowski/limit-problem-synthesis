@@ -577,4 +577,16 @@ public class UnarySin implements UnaryOperator {
 		
 		return "sin";
 	}
+    
+    public Variable getVariable()
+    {
+    	if(_exp.getVariable() != null)
+    	{
+    		return _exp.getVariable();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }

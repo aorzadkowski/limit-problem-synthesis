@@ -55,6 +55,8 @@ public interface Expression
     //public abstract IntervalSet postfixDetermineDomain(); //returns the domainSet of this Expression. This method traverses
     														//this Expression tree in postfix.
     
-    public abstract boolean equals(Expression other);
-    public abstract String getExpressionString();
+    public abstract boolean equals(Expression other); //returns true if other has equivalent attributes as this.
+    public abstract String getExpressionString(); //used in a toString for crossover
+    
+    public abstract Variable getVariable(); //returns the first variable in this Expression. If no variable is found, returns null.
 }

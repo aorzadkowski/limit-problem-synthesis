@@ -13,6 +13,7 @@ public class Number implements Expression
     private int _locationRelativeToPreviousOperator = -1;
     private Expression _previousOperator = null;
     private boolean _expandWhenRoot = true;
+    private final double MIN = .000000001;
 
     public Number(double aNum)
     {
@@ -63,7 +64,14 @@ public class Number implements Expression
     	}
     	else
     	{
-    		str = ((Double)_num).toString();
+    		if(Math.abs(((Double)_num).intValue()-_num) <= MIN)
+    		{
+    			str = ((Integer)((Double)_num).intValue()).toString();
+    		}
+    		else
+    		{
+    			str = ((Double)_num).toString();
+    		}
     	}
     	return str;
     }
@@ -498,4 +506,9 @@ public class Number implements Expression
 		
 		return "" + _num;
 	}
+    
+    public Variable getVariable()
+    {
+    	return null;
+    }
 }

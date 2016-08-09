@@ -572,4 +572,17 @@ public class UnaryMinus implements UnaryOperator {
 		
 		return "Negative";
 	}
+    
+    public Variable getVariable()
+    {
+
+    	if(_exp.getVariable() != null)
+    	{
+    		return _exp.getVariable();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }

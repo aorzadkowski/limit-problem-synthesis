@@ -730,4 +730,19 @@ public class BinaryMult implements BinaryOperator
 		
 		return "*";
 	}
+    
+    public Variable getVariable()
+	{
+		if(_exp1.getVariable() != null)
+		{
+			return _exp1.getVariable();
+		}
+		
+		if(_exp2.getVariable() != null)
+		{
+			return _exp2.getVariable();
+		}
+				
+		return null;
+	}
 }

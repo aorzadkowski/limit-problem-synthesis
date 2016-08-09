@@ -582,5 +582,17 @@ public class UnaryTan implements UnaryOperator {
 		
 		return "tan";
 	}
+    
+    public Variable getVariable()
+    {
+    	if(_exp.getVariable() != null)
+    	{
+    		return _exp.getVariable();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 
 }

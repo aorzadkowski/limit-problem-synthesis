@@ -571,4 +571,17 @@ public class UnaryAbsVal implements UnaryOperator {
 		
 		return "abs";
 	}
+    
+    public Variable getVariable()
+    {
+
+    	if(_exp.getVariable() != null)
+    	{
+    		return _exp.getVariable();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }

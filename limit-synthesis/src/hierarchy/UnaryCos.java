@@ -573,4 +573,17 @@ public class UnaryCos implements UnaryOperator {
 		
 		return "cos";
 	}
+    
+    public Variable getVariable()
+    {
+
+    	if(_exp.getVariable() != null)
+    	{
+    		return _exp.getVariable();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }

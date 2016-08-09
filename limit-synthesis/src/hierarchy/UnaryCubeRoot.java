@@ -568,4 +568,17 @@ public class UnaryCubeRoot implements Expression, UnaryOperator {
 		
 		return "CubeRoot";
 	}
+    
+    public Variable getVariable()
+    {
+
+    	if(_exp.getVariable() != null)
+    	{
+    		return _exp.getVariable();
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
 }

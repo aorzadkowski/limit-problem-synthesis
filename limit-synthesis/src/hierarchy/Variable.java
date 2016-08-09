@@ -489,6 +489,11 @@ public class Variable implements Expression
 		
 		return _name;
 	}
+    
+    public Variable getVariable()
+    {
+    	return this;
+    }
 }
 
 
