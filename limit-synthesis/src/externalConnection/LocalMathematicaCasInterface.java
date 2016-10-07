@@ -83,9 +83,12 @@ public class LocalMathematicaCasInterface extends CasInterface
     	try
       {
           //_mathematicaLink.discardAnswer();
-          String funcStr = limExp.getWolframFunctionDomainString();
+          String funcStr = "InputForm["+limExp.getWolframFunctionDomainString()+"]";
+          System.out.println(funcStr);
           
           String result = _mathematicaLink.evaluateToOutputForm(funcStr, 0);
+          
+          System.out.println(result);
           return result;
           
       }

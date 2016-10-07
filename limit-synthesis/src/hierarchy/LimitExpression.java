@@ -36,6 +36,8 @@ public class LimitExpression
 		_variable = (Variable)null;
 		_target = (Expression)null;
 		_function = (Expression)null;
+		depthMap = new HashMap<>();
+		initializeDepthMap();
 	}
 	
 	public LimitExpression(int lrb, Variable var, Expression target, Expression function) {
@@ -46,7 +48,8 @@ public class LimitExpression
 		_target = target.deepCopy();
 		//_function = function;
 		_function = function.deepCopy();
-		
+
+		depthMap = new HashMap<>();
 		initializeDepthMap();
 	}
 	
@@ -133,7 +136,9 @@ public class LimitExpression
 			//System.out.println("Here is the target Expression " + exp.unParse());
 			_target = exp;
 		}
-		_function = aFunction;		
+		_function = aFunction;	
+		depthMap = new HashMap<>();
+		initializeDepthMap();	
 	}
 	
 	//Evaluates this limit expression without the limit
@@ -328,6 +333,8 @@ public class LimitExpression
 	public void setFunction(Expression e)
 	{
 		_function = e;
+		depthMap = new HashMap<>();
+		initializeDepthMap();
 	}
 	
 	public String getStringRepresentation()
@@ -540,12 +547,15 @@ public class LimitExpression
 	
 	public ArrayList<Expression> getAllLeaves() {
 		ArrayList<Expression> list = new ArrayList<>();
+		if (depthMap == null) {
+			depthMap = new HashMap<>();
+			initializeDepthMap();
+		}
+		Object[] keys =  depthMap.keySet().toArray();
 		
-		Expression[] keys = (Expression[]) depthMap.keySet().toArray();
-		
-		for (Expression exp : keys) {
-			if (exp instanceof Variable || exp instanceof Number) 
-				list.add(exp);
+		for (Object exp : keys) {
+			if (((Expression) exp) instanceof Variable || ((Expression) exp) instanceof Number) 
+				list.add(((Expression) exp));
 		}
 		
 		return list;

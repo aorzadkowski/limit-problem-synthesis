@@ -15,6 +15,7 @@ public class Crossover {
 	private static final boolean EQUAL_SUBTREE_REPLACEMENT = false;
 	private static final boolean REPLACE_LEAVES = true;
 	private static final int MAXIMUM_DIFFERENCE_BETWEEN_PATHS = 2;
+	private static final int MAX_TREE_SIZE = 30;
 
 	
 	public static LimitExpression crossover(LimitExpression a, LimitExpression b) {
@@ -29,13 +30,16 @@ public class Crossover {
 		
 		Expression parentNode = chosenCrossoverNode.getPreviousOperator();
 		
-		if (parentNode instanceof BinaryOperator) {
-			if (((BinaryOperator)parentNode).getExp1().equals(chosenCrossoverNode))
-				((BinaryOperator)parentNode).setExp1(crossoverSubtreeNode);
-			else
-				((BinaryOperator)parentNode).setExp2(crossoverSubtreeNode);
-		} else {
-			((UnaryOperator)parentNode).setExp(crossoverSubtreeNode);
+		int size = crossoverSubtreeNode.size() - parentNode.size() - 1 + a.functionSize();
+		if (crossoverSubtreeNode.size() - parentNode.size() - 1 + a.functionSize() < MAX_TREE_SIZE) {
+			if (parentNode instanceof BinaryOperator) {
+				if (((BinaryOperator)parentNode).getExp1().equals(chosenCrossoverNode))
+					((BinaryOperator)parentNode).setExp1(crossoverSubtreeNode);
+				else
+					((BinaryOperator)parentNode).setExp2(crossoverSubtreeNode);
+			} else {
+				((UnaryOperator)parentNode).setExp(crossoverSubtreeNode);
+			}
 		}
 		
 		LimitExpression newExpression = new LimitExpression(a.getLRB(), a.getVariable(), a.getTarget(), getRootOf(parentNode));

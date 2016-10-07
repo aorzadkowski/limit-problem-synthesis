@@ -70,7 +70,6 @@ public class UnaryPosIntPowers implements UnaryOperator {
 		return null;
 	}
 
-	@Override
 	public ArrayList<Expression> toPreOrderAL() {
 		// TODO Auto-generated method stub
 		return null;
@@ -130,5 +129,47 @@ public class UnaryPosIntPowers implements UnaryOperator {
 	public String getExpressionString() {
 		
 		return "^" + _n;
+	}
+
+	@Override
+	public void reReference() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void expandExpressionOf(LimitExpression limExp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void regressExpressionOf(LimitExpression limExp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void substituteExpressionOf(LimitExpression limExp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean validate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Expression deepCopy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Variable getVariable() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

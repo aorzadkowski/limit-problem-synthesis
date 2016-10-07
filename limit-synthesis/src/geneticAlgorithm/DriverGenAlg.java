@@ -160,15 +160,15 @@ public class DriverGenAlg
                     double roll = Math.random();
                     if (roll< .5)
                     {
-                    	Expression newExp1 = Crossover.crossover(indiv1.getFunction(), indiv2.getFunction());
-                    	indiv1.setFunction(newExp1);
+                    	LimitExpression newExp1 = Crossover.crossover(indiv1, indiv2); 
+                    	indiv1.setFunction(newExp1.getFunction());
                     	//indiv1.mutateLimitExpression();
                     	newPopulation.saveIndividual(i, indiv1);
                     }
                     else
                     {
-                    	Expression newExp2 = Crossover.crossover(indiv1.getFunction(), indiv2.getFunction());
-                    	indiv2.setFunction(newExp2);
+                    	LimitExpression newExp2 = Crossover.crossover(indiv1, indiv2);
+                    	indiv2.setFunction(newExp2.getFunction());
                     	//indiv2.mutateLimitExpression();
                     	newPopulation.saveIndividual(i, indiv2);
                     }
@@ -206,10 +206,10 @@ public class DriverGenAlg
                 for (int i = 0; i < newPopulation.size(); i++) 
                 {
                     bufferedWriter.write(newPopulation.getIndividual(i).getFunction().validate() + " " + newPopulation.getIndividual(i).unParse());
-                    //bufferedWriter.write("##" +newPopulation.getIndividual(i).getWolframFunctionDomainString());
-                    //bufferedWriter.newLine();
-                    //bufferedWriter.write(newPopulation.getIndividual(i).getWolframFunctionRangeString());
-                	//bufferedWriter.write(LocalMathematicaCasInterface.getInstance().getFunctionDomain(newPopulation.getIndividual(i)));
+                    bufferedWriter.write("##" +newPopulation.getIndividual(i).getWolframFunctionDomainString());
+                    bufferedWriter.newLine();
+                    bufferedWriter.write(newPopulation.getIndividual(i).getWolframFunctionRangeString());
+                	bufferedWriter.write(LocalMathematicaCasInterface.getInstance().getFunctionDomain(newPopulation.getIndividual(i)));
                 	bufferedWriter.newLine();
                 }
                 bufferedWriter.newLine();
