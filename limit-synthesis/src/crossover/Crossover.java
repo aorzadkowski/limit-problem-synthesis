@@ -11,11 +11,11 @@ import hierarchy.UnaryOperator;
 import hierarchy.Variable;
 
 public class Crossover {
-	private static final boolean BALANCED = true;
-	private static final boolean EQUAL_SUBTREE_REPLACEMENT = false;
-	private static final boolean REPLACE_LEAVES = true;
-	private static final int MAXIMUM_DIFFERENCE_BETWEEN_PATHS = 2;
-	private static final int MAX_TREE_SIZE = 30;
+	private static final boolean BALANCED = true;  //Attempts to balance the tree with crossover.
+	//private static final boolean EQUAL_SUBTREE_REPLACEMENT = false;
+	private static final boolean REPLACE_LEAVES = true;  //The new subtree will only replace a leaf.
+	//private static final int MAXIMUM_DIFFERENCE_BETWEEN_PATHS = 2;
+	private static final int MAX_TREE_SIZE = 30;	//Maximum number of nodes for a tree in crossover.  
 
 	
 	public static LimitExpression crossover(LimitExpression a, LimitExpression b) {
