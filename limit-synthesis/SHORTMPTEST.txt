@@ -1,0 +1,13 @@
+##Begin
+1
+False
+True
+x < 9
+x > 88
+x <= 2 && (x == 2 || (x > 1 || x < 2))
+C[1]
+Inequality[1a + b, Less, x, Less, 72]
+Surd[x, n]
+Element[x, Integers]
+NotElement[3*x, Reals] && x < 9 
+##Here begins the real test
