@@ -1,10 +1,7 @@
 package symbolicSets;
 
 import hierarchy.*;
-//import oldSymbolicSets.Interval;
-//import oldSymbolicSets.IntervalOpen;
-//import oldSymbolicSets.IntervalSet;
-//import oldSymbolicSets.Singleton;
+import hierarchy.Number;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -17,7 +14,7 @@ public class Domain
 	
 	public Domain()
 	{
-		_conditions = null;
+		_conditions = new ElementOf(new Number(1), new Reals());
 	}
 	
 	public Domain(LogicStatements conditions)
