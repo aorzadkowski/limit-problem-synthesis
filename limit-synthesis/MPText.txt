@@ -1,1 +1,41 @@
 x <= 2 && (x == 2 || (x > 1 || x < 2))
+##Begin
+1
+False
+True
+x < 9
+x > 88
+x <= 2 && (x == 2 || (x > 1 || x < 2))
+C[1]
+Inequality[Cos[12/2], Less, x, Less, 72]
+Surd[x, n]
+Element[x, Integers]
+NotElement[3*x, Reals] && x < 9 
+##Here begins the real test
+##NotElement[x/Pi, Integers] && ((Element[C[1], Integers] && (Inequality[-2*		ArcTan[9 + Sqrt[82]] + 2*Pi*C[1], Less, x, Less, 2*Pi*C[1]] || Inequality[2*ArcTan[(9 + Sqrt[82])^(-1)] + 2*Pi*C[1], Less, x, Less, Pi + 2*Pi*C[1]])) || (Element[C[1], Integers] && (Inequality[-Pi + 2*Pi*C[1], Less, x, Less, -2*ArcTan[9 + Sqrt[82]] + 2*Pi*C[1]] || Inequality[2*Pi*C[1], Less, x, Less, 2*ArcTan[(9 + Sqrt[82])^(-1)] + 2*Pi*C[1]])))
+##NotElement[1/2 + Sin[Sin[x]]/Pi, Integers] && 		Tan[Sin[Sin[x]]] > 0
+NotElement[1/2 + (E*Log[Cos[x]])/Pi, Integers] && Element[C[1], Integers] && Inequality[(-Pi + 4*Pi*C[1])/2, Less, x, Less, (Pi + 4*Pi*C[1])/2]
+x < 1 || x > 1
+x < 0 || Inequality[0, Less, x, Less, 1] || x > 1
+##NotElement[1/2 + x/Pi, Integers] && (x < 				-Sqrt[Pi] || Inequality[-Sqrt[Pi], Less, x, Less, 0] || Inequality[0, Less, x, Less, Sqrt[Pi]] || x > Sqrt[Pi])
+NotElement[1/2 + (8*E)/(Pi*x), Integers] && (x < 0 || x > 0)
+True
+x < -2 || Inequality[-2, Less, x, Less, 0] || x > 0
+x < 0 || x > 0
+x < -1 || Inequality[-1, Less, x, Less, 1] || x > 1
+x >= -1
+x < -1 || Inequality[-1, Less, x, Less, 1] || x > 1
+x < 0 || x > 0
+True
+##x < 				-Sqrt[2 + E] || Inequality[-Sqrt[2 + E], Less, x, Less, Sqrt[2 + E]] || x > Sqrt[2 + E]
+NotElement[1/2 + x/Pi, Integers] && Element[C[1], Integers] && (x == Pi + 2*Pi*C[1] || Inequality[-Pi + 2*Pi*C[1], Less, x, Less, (-Pi + 4*Pi*C[1])/2] || Inequality[2*ArcTan[1 - Sqrt[2]] + 2*Pi*C[1], LessEqual, x, Less, (Pi + 4*Pi*C[1])/2] || Inequality[2*ArcTan[1 + Sqrt[2]] + 2*Pi*C[1], LessEqual, x, Less, Pi + 2*Pi*C[1]])
+NotElement[1/2 + x/Pi, Integers] && (x < 0 || x > 0)
+x < -1 || Inequality[-1, Less, x, Less, 1] || x > 1
+NotElement[1/2 + Log[x^2]/Pi, Integers] && (x < 0 || x > 0)
+NotElement[1/2 + x/Pi, Integers] && (x < 0 || x > 0)
+Inequality[0, Less, x, LessEqual, 1]
+##NotElement[1/2 + Log[x]/Pi, Integers] && x > 0 && x -						 Tan[Log[x]] != 0
+x < -1 || x > -1
+x < -1 || x > -1
+x < -6 || x > -6
+x < -1 || x > -1
