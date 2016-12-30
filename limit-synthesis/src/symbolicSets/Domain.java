@@ -22,57 +22,32 @@ public class Domain
 		_conditions = conditions;
 	}
 	
+	//do we need this
 	public Domain(LimitExpression limExp)
 	{
 		determineDomain(limExp);
 	}
 	
+	//DO WE NEED THIS?
 	public void determineDomain(LimitExpression limExp)
 	{
-		
+		System.err.println("METHOD NOT YET SUPPORTED: DETERMINEDOMAIN--------------------");
 	}
-	
-//	public void add(IntervalSet set)
-//	{
-//		if(_domainSet.size() ==0)
-//		{
-//			_domainSet.add(set);
-//		}
-//		else if(_domainSet.get(0).getFrom() >= set.getFrom())
-//		{
-//			_domainSet.add(0, set);
-//		}
-//		else if(set.getFrom() > _domainSet.get(_domainSet.size()-1).getFrom())
-//		{
-//			_domainSet.add(set);
-//		}
-//		else
-//		{
-//			for(int i = 0; i < _domainSet.size(); i++)
-//			{
-//				if(_domainSet.get(i).getFrom() >= set.getFrom())
-//				{
-//					_domainSet.ensureCapacity(_domainSet.size()+1);
-//					_domainSet.add(i, set);
-//					break;
-//				}
-//			}
-//		}	
-//	}
-	
-//	public IntervalSet getIntervalSetAt(int index)
-//	{
-//		return _domainSet.get(index);
-//	}
-	
-//	public void clearDomainSet()
-//	{
-//		_domainSet = new ArrayList<IntervalSet>();
-//	}
 	
 	public boolean isOnDomain(double value)
 	{
 		return _conditions.contains(value);
+	}
+	
+	//public 
+	
+	public String toString()
+	{
+		String str = "{";
+		str+= _conditions.toString();
+		str+= "}";
+		
+		return str;
 	}
 	
 //	public double getAnInterestingPoint()
@@ -121,14 +96,41 @@ public class Domain
 //		
 //		return null;
 //	}
+//	public void add(IntervalSet set)
+//	{
+//		if(_domainSet.size() ==0)
+//		{
+//			_domainSet.add(set);
+//		}
+//		else if(_domainSet.get(0).getFrom() >= set.getFrom())
+//		{
+//			_domainSet.add(0, set);
+//		}
+//		else if(set.getFrom() > _domainSet.get(_domainSet.size()-1).getFrom())
+//		{
+//			_domainSet.add(set);
+//		}
+//		else
+//		{
+//			for(int i = 0; i < _domainSet.size(); i++)
+//			{
+//				if(_domainSet.get(i).getFrom() >= set.getFrom())
+//				{
+//					_domainSet.ensureCapacity(_domainSet.size()+1);
+//					_domainSet.add(i, set);
+//					break;
+//				}
+//			}
+//		}	
+//	}
 	
-	public String toString()
-	{
-		String str = "{";
-		str+= _conditions.toString();
-		str+= "}";
-		
-		return str;
-	}
-
+//	public IntervalSet getIntervalSetAt(int index)
+//	{
+//		return _domainSet.get(index);
+//	}
+	
+//	public void clearDomainSet()
+//	{
+//		_domainSet = new ArrayList<IntervalSet>();
+//	}
 }

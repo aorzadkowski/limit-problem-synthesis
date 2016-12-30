@@ -34,7 +34,7 @@ public class NotElementOf extends ElementStatements
 	@Override
 	public String toString() 
 	{
-		return _expr.toWolf() + " !? " + _system.toString();
+		return "("+_expr.toWolf() + " !? " + _system.toString()+")";
 	}
 
 }

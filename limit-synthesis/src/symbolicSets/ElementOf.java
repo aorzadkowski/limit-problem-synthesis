@@ -32,7 +32,7 @@ public class ElementOf extends ElementStatements {
 	@Override
 	public String toString() 
 	{
-		return _expr.toWolf() + " ? " + _system.toString();
+		return "("+ _expr.toWolf() + " ? " + _system.toString() + ")";
 	}
 
 }
