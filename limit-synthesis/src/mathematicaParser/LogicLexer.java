@@ -8,16 +8,19 @@ public class LogicLexer
 {
 	//("lim " + "[a-z,A-Z]" + "[>][+]?[-]?[ ]" + "[^ ]+" + "[ ]"), 
 	//SIMPLEINEQUALITY( "[^=!<>]+"  + "[ ]" + "[=]?[!]?[<]?[>]?[=]?" + "[ ]" + "[-]?[0-9]*[.]?[0-9]+"),
+	//SURD("Surd\\[" + "[^,]+" + ", " + "[^\\]]+" + "\\]"),
+	//}else if(matcher.group(TokenType.SURD.name()) != null) {
+  	//tokens.add(new Token(TokenType.SURD, matcher.group(TokenType.SURD.name())));
+  	//continue;
 	public static enum TokenType 
 	  {
 		    COMMENT("##"),
 		    TRUE("True"),
 		    FALSE("False"),
 		    ARBITRARYCONSTANT("C\\[" + "[0-9]+" + "\\]" ),
-		    SURD("Surd\\[" + "[^,]+" + ", " + "[^\\]]+" + "\\]"),
-		    SIMPLEINEQUALITY("[a-z,A-Z]" + "[ ]" + "[=]?[!]?[<]?[>]?[=]?" + "[ ]" + "[-]?[0-9]*[.]?[0-9]+"),
+		    SIMPLEINEQUALITY("[a-z,A-Z]" + "[ ]" + "[=]?[!]?[<]?[>]?[=]?" + "[ ]" + "[^( |\\))]+"),
 		    AND("&&"),
-		    OR("[|||]" + "[|||]"),
+		    OR("[\\|]" + "[\\|]"),
 		    COMPLEXINEQUALITY("Inequality\\[" + "[^,]+" + ", " + "[^,]+" + ", " + "[^,]+" + ", " + "[^,]+" + ", " + "[^\\]]+" + "\\]"),
 		    ELEMENT("Element\\[" + "[^,]+" + ", " + "[^\\]]+" + "\\]"),
 		    NOTELEMENT("NotElement\\[" + "[^,]+" + ", " + "[^\\]]+" + "\\]"),
@@ -79,7 +82,7 @@ public class LogicLexer
 		    while (matcher.find()) {
 		      if(matcher.group(TokenType.COMMENT.name()) != null) {
 			    	tokens.add(new Token(TokenType.COMMENT, matcher.group(TokenType.COMMENT.name())));
-			    	continue;
+			    	return tokens;
 		      }else if (matcher.group(TokenType.TRUE.name()) != null) {
 			        tokens.add(new Token(TokenType.TRUE, matcher.group(TokenType.TRUE.name())));
 			        continue;
@@ -88,9 +91,6 @@ public class LogicLexer
 			        continue;
 		      }else if(matcher.group(TokenType.ARBITRARYCONSTANT.name()) != null) {
 		    	  	tokens.add(new Token(TokenType.ARBITRARYCONSTANT, matcher.group(TokenType.ARBITRARYCONSTANT.name())));
-		    	  	continue;
-		      }else if(matcher.group(TokenType.SURD.name()) != null) {
-		    	  	tokens.add(new Token(TokenType.SURD, matcher.group(TokenType.SURD.name())));
 		    	  	continue;
 		      }else if(matcher.group(TokenType.SIMPLEINEQUALITY.name()) != null) {
 		    	  	tokens.add(new Token(TokenType.SIMPLEINEQUALITY, matcher.group(TokenType.SIMPLEINEQUALITY.name())));

@@ -56,11 +56,9 @@ public class MPDriver
 		        }
 				
 		        //PROCESSING FILE...
-		        //ArrayList<LimitExpression> LimitExpressionList = new ArrayList<LimitExpression>(); //this will be the list of LimitExpressions.
 				int index = 0;
 				for(String testStr0: LinesOfTextFile)
 				{
-					//String testStr1 = "lim x> #Pi/2 x+2"; //"lim x> 1 reciprocal(2.0*5.0)+3.0+square(6.0*7.0/4.0)+sqrt(absVal(3.0*11.0+18.0))/cos(sin(cos(3.141592653589793/2.0)))"; 
 					System.out.println();
 					System.out.println("Now Processing line: " + index);
 					
@@ -68,6 +66,8 @@ public class MPDriver
 					ArrayList<LogicLexer.Token> ALOut= alex.lex(testStr0);
 					
 					System.out.println("Here is the Tokenized infix ArrayList.");
+					
+					
 					
 					for(LogicLexer.Token toke: ALOut)
 					{
@@ -79,66 +79,50 @@ public class MPDriver
 						{
 							System.out.println("The rest was probably caused by the arbitrary constant.");
 							break;
-						}
-						
+						}						
 					}
-					
-					
+								
 					
 					System.out.println("Now to postfix------------------------");
 					LogicParser prsr = new LogicParser();
 					Domain d = prsr.parseDomain(ALOut);
-//					if(e != null)
-//					{
-//						LimitExpressionList.add(prsr.getLimit());
-//						System.out.println("Here is the LimitExpression " + prsr.getLimit().unParse());
-//						
-//						//System.out.println("Here is the Expression " + e.unParse());
-//						
-//						//now to evaluate for the limit expression variable
-//						HashMap m = new HashMap<Variable, Double>();
-//						if(!prsr.getVar().contains(prsr.getLimit().getVariable()))
-//						{
-//							System.out.println("the variable in the limit expression is not in the function being evaluated");
-//						}
-//						else
-//						{
-//							Double varEquals = prsr.getLimit().getTargetDouble();
-//							System.out.println("solving for " + prsr.getLimit().getVariable().getName() + " = " + varEquals + " & ");
-//							m.put(prsr.getLimit().getVariable(), varEquals);
-//							varEquals = null;
-//						}
-//
-//						System.out.println("The value of the function when evaluating for those variables is " + e.evaluate(m));
-//						m.clear();
-//						prsr.clearVar();
-//						prsr.clearLimit();
-//					}
-					index++;
-//				}
-//				
-//				System.out.println("\nHere is the list of Limits ");
-//				for(LimitExpression l : LimitExpressionList)
-//				{
-//					System.out.println(l.translateToWolfram());
-//					if(l.isContinuousAtTarget())
-//					{
-//						System.out.println("And is it continuous at the approach value?	" 
-//								+ l.isContinuousAtTarget() + "    And the value at that point is " + l.evaluate());
-//					}
-//					else
-//					{
-//						System.out.println("And is it continuous at the approach value?	" 
-//								+ l.isContinuousAtTarget());
-//					}
-//					System.out.println("And the functionSize is:        \t" + l.functionSize());
-//					System.out.println("And the left handed behavior is:\t" + l.leftHandBehaviorAtTarget());
-//					System.out.println("And the right handed behavior is:\t" + l.rightHandBehaviorAtTarget());
-//					System.out.println();			
+					System.out.println("Here is the domain: ");
+					System.out.println(d.toString());
+					index++;	
 				}
 				
+				//further tests
+//				LogicLexer.Token testToke = new LogicLexer.Token(LogicLexer.TokenType.COMPLEXINEQUALITY, "Inequality[(-3*Pi + 4*Pi*C[1])/4, Less, x, Less, (Pi + 4*Pi*C[1]");
+//				System.out.println("Testing count parens and bracks: " + testToke.getData());
+//				System.out.println("Missing parens: " + LogicParser.countParenthesesAndBrackets(testToke)[0] +  ", Missing brackets: " + LogicParser.countParenthesesAndBrackets(testToke)[1]);
 				
-				
-				
+				/*LogicLexer.Token testToke = new LogicLexer.Token(LogicLexer.TokenType.SIMPLEINEQUALITY, "x <= 11");
+				System.out.println("Testing simpleinequality lexer: " + testToke.getData());
+				System.out.println("operator: " + NumericLexer.lexSimpleInequality(testToke)[0] +  ", bound: " + NumericLexer.lexSimpleInequality(testToke)[1]);
+				*/
+				/*LogicLexer.Token testToke = new LogicLexer.Token(LogicLexer.TokenType.COMPLEXINEQUALITY, "Inequality[-Sqrt[2 + E], Less, x, Less, Sqrt[2 + E]]");
+				System.out.println("Testing complexinequality lexer: " + testToke.getData());
+				System.out.println("LOW BOUND: " + NumericLexer.lexComplexInequality(testToke)[0] +  ", OPERATOR1: " + NumericLexer.lexComplexInequality(testToke)[1] +  ", VARIABLE: " + NumericLexer.lexComplexInequality(testToke)[2] +  ", OPERATOR2: " + NumericLexer.lexComplexInequality(testToke)[3] +  ", UPPER BOUND: " + NumericLexer.lexComplexInequality(testToke)[4]);
+*/
+				/*LogicLexer.Token testToke = new LogicLexer.Token(LogicLexer.TokenType.ELEMENT, "Element[1/2 + x/Pi, Integers]");
+				System.out.println("Testing simpleinequality lexer: " + testToke.getData());
+				System.out.println("Expression: " + NumericLexer.lexElementOf(testToke)[0] +  ", numberSystem: " + NumericLexer.lexElementOf(testToke)[1]);
+				*/
+				/*LogicLexer.Token testToke = new LogicLexer.Token(LogicLexer.TokenType.NOTELEMENT, "NotElement[1/2 + x/Pi, Integers]");
+				System.out.println("Testing simpleinequality lexer: " + testToke.getData());
+				System.out.println("Expression: " + NumericLexer.lexNotElementOf(testToke)[0] +  ", numberSystem: " + NumericLexer.lexNotElementOf(testToke)[1]);
+*/
+				/*System.out.println("Testing NumericLexer and NumericParser");
+				LogicLexer.Token testToke = new LogicLexer.Token(LogicLexer.TokenType.COMPLEXINEQUALITY, "Inequality[Cos[12/2], Less, x, Less, 72]");
+				System.out.println("LOW BOUND: " + NumericLexer.lexComplexInequality(testToke)[0] +  ", OPERATOR1: " + NumericLexer.lexComplexInequality(testToke)[1] +  ", VARIABLE: " + NumericLexer.lexComplexInequality(testToke)[2] +  ", OPERATOR2: " + NumericLexer.lexComplexInequality(testToke)[3] +  ", UPPER BOUND: " + NumericLexer.lexComplexInequality(testToke)[4]);
+				System.out.println("Lexing low Bound: ");
+				ArrayList<NumericLexer.Token> lowBoundLexedTokens = NumericLexer.lex(NumericLexer.lexComplexInequality(testToke)[0]);
+				for(NumericLexer.Token aToke: lowBoundLexedTokens)
+				{
+					System.out.println(aToke);
+				}
+				Expression lowBoundExpression = NumericParser.parse(lowBoundLexedTokens);
+				System.out.println("Here is the low bound expression: " + lowBoundExpression.toWolf());
+				*/
 	}	
 }
