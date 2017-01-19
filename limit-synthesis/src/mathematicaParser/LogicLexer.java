@@ -67,7 +67,7 @@ public class LogicLexer
 		    }
 		  }
 
-		  public ArrayList<Token> lex(String input) {
+		  public static ArrayList<Token> lex(String input) {
 		    // The tokens to return
 		    ArrayList<Token> tokens = new ArrayList<Token>();
 
@@ -121,11 +121,11 @@ public class LogicLexer
 			    	continue;
 		      } else if (matcher.group(TokenType.CLOSEBRACKET.name()) != null){
 			    	tokens.add(new Token(TokenType.CLOSEBRACKET, matcher.group(TokenType.CLOSEBRACKET.name())));
-			    	System.out.println("-------------------------------------------------------------------------------------------------------OH NO! AN UNINCLUDED BRACKET");
+			    	//System.out.println("-------------------------------------------------------------------------------------------------------OH NO! AN UNINCLUDED BRACKET");
 			    	continue;
 		      } else if (matcher.group(TokenType.LEFTOVERS.name()) != null){
 			    	tokens.add(new Token(TokenType.LEFTOVERS, matcher.group(TokenType.LEFTOVERS.name())));
-			    	System.out.println("------------------------OH NO! --------------------------------------------------------------------------LEFTOVERS");
+			    	//System.out.println("------------------------OH NO! --------------------------------------------------------------------------LEFTOVERS");
 			    	continue;
 		      } else if (matcher.group(TokenType.WHITESPACE.name()) != null)
 		    	  	continue;

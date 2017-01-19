@@ -47,9 +47,26 @@ public class LogicParser
 					}
 				}
 			}
+			a[1]++;//We also need the bracket that closes the bracket opened at the beginning of the inequality
+		}
+		else if(toke.getType().equals(LogicLexer.TokenType.SIMPLEINEQUALITY))
+		{
+			String data = toke.getData();
+			for(int i = 0; i < data.length(); i++)
+			{
+				//System.out.println(data.substring(i) + " " + a[0] + " " + a[1] + " " + data.charAt(i)); //for debugging
+				switch(data.charAt(i))
+				{
+				case '(': a[0]++; break;
+				case ')': a[0]--; break;
+				case '[': a[1]++; break;
+				case ']': a[1]--; break;
+				default: break;
+				}			
+			}
 		}
 		
-		a[1]++;//We also need the bracket that closes the bracket opened at the beginning of the inequality
+		
 		
 		return a;
 	}
@@ -57,7 +74,7 @@ public class LogicParser
 	
 	//takes the infix-oriented tokens from the lexer and cleans the list so that all LEFTOVERS are
 	//resolved before passing the tokens to the parser. 
-	private ArrayList<LogicLexer.Token> preParse(ArrayList<LogicLexer.Token> inList)
+	private static ArrayList<LogicLexer.Token> preParse(ArrayList<LogicLexer.Token> inList) throws PruneException
 	{
 		
 		//LogicLexer.Token previous = null;
@@ -67,11 +84,19 @@ public class LogicParser
 			{
 				int[] missing = countParenthesesAndBrackets(inList.get(i)); //find out how many missing close 
 																//parentheses and brackets the current complex inequality has.
-				while(missing[0] != 0 || missing[1] !=0)
+				while((missing[0] != 0 || missing[1] !=0))
 				{
-					//System.out.println("current inequality " + inList.get(i).getData() + ", current missing characters: " );
+					System.out.println("current inequality (preparse)" + inList.get(i).getData());
 					String str = "";
-					String leftover = inList.get(i+1).getData(); // save the leftover data
+					String leftover;
+					try
+					{
+						leftover = inList.get(i+1).getData(); // save the leftover data
+					}
+					catch(IndexOutOfBoundsException e)
+					{
+						throw new PruneException("Could not match Parentheses and brackets");
+					}
 					inList.remove(i+1); // get rid of the leftover
 					str = inList.get(i).getData(); // get the data of the original complex inequality
 					str += leftover; // add the leftover data
@@ -80,7 +105,36 @@ public class LogicParser
 				
 					missing = countParenthesesAndBrackets(inList.get(i));
 				}
-			}			
+			}
+			else if(inList.get(i).getType().equals(LogicLexer.TokenType.SIMPLEINEQUALITY))
+			{
+				int[] missing = countParenthesesAndBrackets(inList.get(i)); //find out how many missing close 
+				//parentheses and brackets the current simple inequality has.
+				while(missing[0] != 0 || missing[1] !=0)
+				{
+					System.out.println("current inequality (preparse)" + inList.get(i).getData());
+					String str = "";
+					String leftover = inList.get(i+1).getData(); // save the leftover data
+					inList.remove(i+1); // get rid of the leftover
+					str = inList.get(i).getData(); // get the data of the original simple inequality
+					str += leftover; // add the leftover data
+					inList.remove(i); //remove the old simple inequality
+					inList.add(i, new LogicLexer.Token(LogicLexer.TokenType.SIMPLEINEQUALITY, str));//add the new simple inequality
+
+					missing = countParenthesesAndBrackets(inList.get(i));
+				}
+				
+				//fixing the leftover after the simpleInequality problem would require a lot of code and could mess up more than it helps.
+//				if(inList.get(i+1).getType().equals(LogicLexer.TokenType.OPENBRACKET) || inList.get(i+1).getType().equals(LogicLexer.TokenType.OPENPAREN))
+//				{
+//					if(inList.get(i+2).getType().equals(LogicLexer.TokenType.LEFTOVERS))
+//					{
+//						System.out.println("current inequality (preparse)" + inList.get(i).getData() + " adding " + inList.get(i+2).getData());
+//						
+//					}
+//				}
+			}
+			
 		}
 		//TODO FIX OTHER PARSING PROBLEMS
 		
@@ -91,7 +145,7 @@ public class LogicParser
 	
 	//converts inList to postfix, then converts all tokens into 
 	//LogicStatements (found in symbolicSets) and assembles them into a domain.
-	public Domain parseDomain(ArrayList<LogicLexer.Token> inList)
+	public static Domain parseDomain(ArrayList<LogicLexer.Token> inList) throws PruneException
 	{
 		//clean inList
 		inList = preParse(inList);
@@ -113,11 +167,11 @@ public class LogicParser
 		{
 			if(toke.getType().equals(LogicLexer.TokenType.TRUE))
 			{
-				return new Domain();
+				return new Domain(new True());
 			}
 			else if(toke.getType().equals(LogicLexer.TokenType.FALSE))
 			{
-				return new Domain(new NotElementOf(new hierarchy.Number(1), new Reals()));
+				return new Domain(new False());
 			}
 			else if(toke.getType().equals(LogicLexer.TokenType.SIMPLEINEQUALITY))
 			{
@@ -165,6 +219,10 @@ public class LogicParser
 			{
 				operator.push(toke);
 			}
+			else if(toke.getType().equals(LogicLexer.TokenType.LEFTOVERS))
+			{
+				throw new PruneException("Leftovers found: " + toke.getData());
+			}
 			else if(toke.getType().equals(LogicLexer.TokenType.CLOSEPAREN))
 			{
 				try
@@ -203,7 +261,7 @@ public class LogicParser
 			postfix.add(operator.pop());
 		}
 		//Done converting to postfix. Printing to verify...
-		System.out.println(postfixToString(postfix));
+		//System.out.println(postfixToString(postfix));
 		
 		//Lastly, we convert the tokens into LogicStatements and create a domain
 		while(!postfix.isEmpty())
@@ -215,7 +273,6 @@ public class LogicParser
 				{
 					//create the appropriate simple inequality.
 					ArrayList<NumericLexer.Token> lexedTokens = NumericLexer.lex(NumericLexer.lexSimpleInequality(current)[1]);
-					
 					String symbol = NumericLexer.lexSimpleInequality(current)[0];
 					if(symbol.equalsIgnoreCase("<"))
 					{
@@ -359,7 +416,7 @@ public class LogicParser
 	}
 	
 	//Allows us to check to see if the postfix Queue is correct before it is converted to Expresion form
-	private String postfixToString(Queue postfixAL)
+	private static String postfixToString(Queue postfixAL)
 	{
 		String str = "";
 		Queue<LogicLexer.Token> postfixClone = new ConcurrentLinkedQueue<LogicLexer.Token>(postfixAL);

@@ -61,7 +61,7 @@ public class NumericParser
 			do
 			{
 				anythingInserted = false; 
-				System.out.print("toke = " + toke.getData() + " " + toke.getType() + " ");
+				//System.out.print("toke = " + toke.getData() + " " + toke.getType() + " ");
 				
 				if(toke.getType().equals(NumericLexer.TokenType.NUMBER) || toke.getType().equals(NumericLexer.TokenType.VARIABLE) || toke.getType().equals(NumericLexer.TokenType.E) || toke.getType().equals(NumericLexer.TokenType.PI))
 				{
@@ -89,7 +89,15 @@ public class NumericParser
 				}
 				else if(toke.getType().equals(NumericLexer.TokenType.BINARYOP)) //SEE ABOVE PRECEDENCE
 				{
-					if(operator.isEmpty() || operator.peek().getType().equals(NumericLexer.TokenType.OPENPAREN) || operator.peek().getType().equals(NumericLexer.TokenType.OPENBRACKET))
+					if(toke.getData().equalsIgnoreCase("-") && (previousToken.getType().equals(NumericLexer.TokenType.WHITESPACE) || previousToken.getType().equals(NumericLexer.TokenType.OPENBRACKET) || previousToken.getType().equals(NumericLexer.TokenType.OPENPAREN)))
+					{
+						//make sure that this is supposed to be a binary minus, not just a unary negative
+						//This token is actually a unary operator.
+						operator.push(new NumericLexer.Token(NumericLexer.TokenType.UNARYOP, "Negative"));
+						System.out.println("Negative found");
+						
+					}
+					else if(operator.isEmpty() || operator.peek().getType().equals(NumericLexer.TokenType.OPENPAREN) || operator.peek().getType().equals(NumericLexer.TokenType.OPENBRACKET))
 					{
 						operator.push(toke);
 					}
@@ -368,6 +376,26 @@ public class NumericParser
 					Expression pop1 = exStack.pop();
 					exStack.push(new UnarySquared(pop1));
 				}
+				else if(current.getData().equalsIgnoreCase("Negative"))
+				{
+					Expression pop1 = exStack.pop();
+					exStack.push(new UnaryMinus(pop1));
+				}
+				else if(current.getData().equalsIgnoreCase("Cot"))
+				{
+					Expression pop1 = exStack.pop();
+					exStack.push(new UnaryReciprocal(new UnaryTan(pop1)));
+				}
+				else if(current.getData().equalsIgnoreCase("Csc"))
+				{
+					Expression pop1 = exStack.pop();
+					exStack.push(new UnaryReciprocal(new UnarySin(pop1)));
+				}
+				else if(current.getData().equalsIgnoreCase("Sec"))
+				{
+					Expression pop1 = exStack.pop();
+					exStack.push(new UnaryReciprocal(new UnaryCos(pop1)));
+				}
 				else
 				{
 					throw new IllegalArgumentException("YOU FORGOT TO HANDLE ALL UNARYOPS" + current.getData());
@@ -394,7 +422,8 @@ public class NumericParser
 		}
 		if(!exStack.isEmpty())
 		{
-			System.out.println(exStack.pop().unParse());
+			System.out.println("ExStack = " + exStack.pop().unParse());
+			System.out.println("output = " + output.unParse());
 			throw new IllegalArgumentException("SOMEHOW THERE IS STILL SOMETHING IN EXSTACK");
 		}
 		

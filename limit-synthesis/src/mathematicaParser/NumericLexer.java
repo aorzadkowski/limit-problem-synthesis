@@ -25,12 +25,13 @@ public class NumericLexer
 		    NEGATIVENUMBER("[-][0-9]*[.]?[0-9]+"), 
 		    WHITESPACE("[ \t\f\r\n]+"),
 		    UNARYOP("[A-Z,a-z]{2,}"), 
-		    VARIABLE("x"),
+		    VARIABLE("[a-z]"),
 		    ARBITRARYCONSTANT("C\\[" + "[0-9]+" + "\\]" ),
 		    OPENBRACKET("\\["),
 		  	CLOSEBRACKET("\\]"),
 		    OPENPAREN("[(]"), 
 		    CLOSEPAREN("[)]"),
+		    NUMBERSIGN("#"),
 		    BINARYOP("[*/+-^]")
 		    ;
 
@@ -69,15 +70,21 @@ public class NumericLexer
 		    }
 		  }
 		  
-		  public static String[] lexSimpleInequality(LogicLexer.Token toke)
+		  public static String[] lexSimpleInequality(LogicLexer.Token toke) throws PruneException
 		  {
 			  //We assume that the first element in a simple inequality is a variable x.
+			  int index = 0;
+			  String str = toke.getData();
+			  if(str.charAt(index) != 'x' && str.charAt(index) != 't' && str.charAt(index) != 'p')
+			  {
+				  throw new PruneException("This simple Inequality does not start with x: " + str);
+			  }
+			  
 			  //Now we have to lex the operator (<,>,==,...) and the bound. 
 			  String[] result = {"",""}; 
 			  //result[0] = the operator
 			  //result[1] = the bound
-			  int index = 2;
-			  String str = toke.getData();
+			  index = 2;
 			  result[0] += str.charAt(index);
 			  index++;
 			  if(str.charAt(index) != ' ')
@@ -235,7 +242,8 @@ public class NumericLexer
 			  return result;
 		  }
 
-		  public static ArrayList<NumericLexer.Token> lex(String input) {
+		  public static ArrayList<NumericLexer.Token> lex(String input) throws PruneException
+		  {
 		    // The tokens to return
 		    ArrayList<Token> tokens = new ArrayList<Token>();
 
@@ -277,7 +285,10 @@ public class NumericLexer
 			    	continue;
 		      } else if (matcher.group(TokenType.ARBITRARYCONSTANT.name()) != null){
 			    	tokens.add(new Token(TokenType.ARBITRARYCONSTANT, matcher.group(TokenType.ARBITRARYCONSTANT.name())));
-			    	continue;
+			    	throw new PruneException("Here is an ArbitraryConstant: " + input);
+		      } else if (matcher.group(TokenType.NUMBERSIGN.name()) != null){
+			    	tokens.add(new Token(TokenType.NUMBERSIGN, matcher.group(TokenType.NUMBERSIGN.name())));
+			    	throw new PruneException("Here is an NUMBERSIGN: " + input);
 		      } else if (matcher.group(TokenType.OPENBRACKET.name()) != null){
 			    	tokens.add(new Token(TokenType.OPENBRACKET, matcher.group(TokenType.OPENBRACKET.name())));
 			    	continue;

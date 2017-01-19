@@ -51,8 +51,6 @@ public class MPDriver
 		            System.out.println(
 		                "Error reading file '" 
 		                + fileName + "'");                  
-		            // Or we could just do this: 
-		            // ex.printStackTrace();
 		        }
 				
 		        //PROCESSING FILE...
@@ -60,34 +58,30 @@ public class MPDriver
 				for(String testStr0: LinesOfTextFile)
 				{
 					System.out.println();
-					System.out.println("Now Processing line: " + index);
+					System.out.println("Now Processing line: " + index + " " + testStr0);
 					
-					LogicLexer alex = new LogicLexer();
-					ArrayList<LogicLexer.Token> ALOut= alex.lex(testStr0);
+					ArrayList<LogicLexer.Token> ALOut= LogicLexer.lex(testStr0);
 					
 					System.out.println("Here is the Tokenized infix ArrayList.");
-					
-					
-					
 					for(LogicLexer.Token toke: ALOut)
 					{
-						if(!toke.getType().equals(LogicLexer.TokenType.ARBITRARYCONSTANT))
-						{
-							System.out.println(toke);
-						}
-						else
-						{
-							System.out.println("The rest was probably caused by the arbitrary constant.");
-							break;
-						}						
+						System.out.println(toke);
 					}
-								
 					
 					System.out.println("Now to postfix------------------------");
-					LogicParser prsr = new LogicParser();
-					Domain d = prsr.parseDomain(ALOut);
-					System.out.println("Here is the domain: ");
-					System.out.println(d.toString());
+					try
+					{
+						Domain d = LogicParser.parseDomain(ALOut);
+						System.out.println("Here is the domain: ");
+						System.out.println(d.toString());
+						System.out.println(d.getAnInterestingPoint().unParse());
+						
+					}
+					catch(PruneException e)
+					{
+						e.printStackTrace();
+					}
+					
 					index++;	
 				}
 				
