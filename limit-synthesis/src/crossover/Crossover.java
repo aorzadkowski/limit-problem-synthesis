@@ -15,7 +15,7 @@ public class Crossover {
 	//private static final boolean EQUAL_SUBTREE_REPLACEMENT = false;
 	private static final boolean REPLACE_LEAVES = true;  //The new subtree will only replace a leaf.
 	//private static final int MAXIMUM_DIFFERENCE_BETWEEN_PATHS = 2;
-	private static final int MAX_TREE_SIZE = 30;	//Maximum number of nodes for a tree in crossover.  
+	private static final int MAX_TREE_SIZE = 11;	//Maximum number of nodes for a tree in crossover.  
 
 	
 	public static LimitExpression crossover(LimitExpression a, LimitExpression b) {
@@ -64,51 +64,6 @@ public class Crossover {
 		} else {
 			return b.getRandomNode();
 		}
-	}
-	
-	/**
-	 * Depreciated
-	 * @param a
-	 * @param b
-	 * @return new expression representing child of a and b
-	 */
-	public static Expression crossover(Expression a, Expression b) {
-		//Expression nodeToSwitch = randomNode(a);
-		
-		Expression chosenCrossoverNode;
-		Expression crossoverSubtreeNode;
-		
-		if (REPLACE_LEAVES) {
-			if (BALANCED)
-				chosenCrossoverNode = getShortestPath(a);
-			else 
-				chosenCrossoverNode = getRandomLeaf(a);
-		} else {
-			chosenCrossoverNode = getRandomNode(a);
-		}
-
-		int dLength = getLongestPathLength(chosenCrossoverNode) - getShortestPathLength(chosenCrossoverNode);
-		
-		if (BALANCED) {
-			crossoverSubtreeNode = getSubtreeOfLength(b, dLength);
-		} else {
-			crossoverSubtreeNode = getRandomNode(b);
-		}
-		
-		Expression parentNode = chosenCrossoverNode.getPreviousOperator();
-		
-		
-		if (parentNode instanceof BinaryOperator) {
-			if (((BinaryOperator)parentNode).getExp1().equals(chosenCrossoverNode))
-				((BinaryOperator)parentNode).setExp1(crossoverSubtreeNode);
-			else
-				((BinaryOperator)parentNode).setExp2(crossoverSubtreeNode);
-		} else {
-			((UnaryOperator)parentNode).setExp(crossoverSubtreeNode);
-		}
-		
-		
-		return getRootOf(parentNode);
 	}
 	
 	private static Expression getRootOf(Expression e) {
