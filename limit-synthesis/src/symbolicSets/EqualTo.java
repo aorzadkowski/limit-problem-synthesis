@@ -1,6 +1,8 @@
 package symbolicSets;
 
 import hierarchy.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EqualTo extends Inequality 
@@ -22,9 +24,31 @@ public class EqualTo extends Inequality
 		return (((Double)value).equals(_numericExpression.evaluate(map)));
 	}
 	
+	@Override
+	public ArrayList<Expression> findInterestingPoints() 
+	{
+		ArrayList<Expression> result = new ArrayList<Expression>();
+		result.add(_numericExpression);
+		return result;
+	}
+	
 	public String toString()
 	{
 		return "("+ _variable.unParse() + "==" + _numericExpression.toWolf() + ")";
+	}
+
+	@Override
+	public ArrayList<Expression> findLeftInterestingPoints() 
+	{
+		ArrayList<Expression> result = new ArrayList<Expression>();
+		return result;
+	}
+
+	@Override
+	public ArrayList<Expression> findRightInterestingPoints() 
+	{
+		ArrayList<Expression> result = new ArrayList<Expression>();
+		return result;
 	}
 	
 }

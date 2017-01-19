@@ -9,17 +9,25 @@ import java.util.ArrayList;
 public class Domain 
 {
 	private LogicStatements _conditions;
-	//public static final Domain ALL_REALS = new Domain(new IntervalOpen(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
-	//public static final Domain ALL_INTEGERS = new Domain(new IntervalOpen(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
-	
+	private ArrayList<hierarchy.Expression> _interestingPoints;
+	private ArrayList<hierarchy.Expression> _LeftSidedInterestingPoints;
+	private ArrayList<hierarchy.Expression> _RightSidedInterestingPoints;
+
 	public Domain()
 	{
-		_conditions = new ElementOf(new Number(1), new Reals());
+		_conditions = new True();
+		_interestingPoints = _conditions.findInterestingPoints();
+		_LeftSidedInterestingPoints = _conditions.findLeftInterestingPoints();
+		_RightSidedInterestingPoints = _conditions.findRightInterestingPoints();
+		
 	}
 	
 	public Domain(LogicStatements conditions)
 	{
 		_conditions = conditions;
+		_interestingPoints = _conditions.findInterestingPoints();
+		_LeftSidedInterestingPoints = _conditions.findLeftInterestingPoints();
+		_RightSidedInterestingPoints = _conditions.findRightInterestingPoints();
 	}
 	
 	//do we need this
@@ -39,7 +47,19 @@ public class Domain
 		return _conditions.contains(value);
 	}
 	
-	//public 
+	public boolean validate()
+	{
+		if(_conditions instanceof True)
+		{
+			return false;
+		}
+		if(_conditions instanceof False)
+		{
+			return false;
+		}
+		
+		return true;
+	}
 	
 	public String toString()
 	{
@@ -50,32 +70,61 @@ public class Domain
 		return str;
 	}
 	
-//	public double getAnInterestingPoint()
-//	{
-//		Random gen = new Random();
-//		
-//		int index = gen.nextInt(_domainSet.size());
-//		
-//		IntervalSet interestingSet = _domainSet.get(index);
-//		
-//		if(interestingSet instanceof Singleton)
-//		{
-//			return interestingSet.getFrom();
-//		}
-//		else
-//		{
-//			int leftOrRight = gen.nextInt(2);
-//			
-//			if(leftOrRight == 0)
-//			{
-//				return ((Interval)interestingSet).getFrom();
-//			}
-//			else
-//			{
-//				return ((Interval)interestingSet).getTo();
-//			}
-//		}
-//	}
+	public Expression getAnInterestingPoint()
+	{
+		Random gen = new Random();
+		if(!_interestingPoints.isEmpty())
+		{
+			//If interesting points is already filled with values, just pick one at random
+			return _interestingPoints.get(gen.nextInt(_interestingPoints.size()-1));
+		}
+		
+		_interestingPoints = _conditions.findInterestingPoints();
+		if(_interestingPoints.size() == 1)
+		{
+			return _interestingPoints.get(0);
+		}
+		else if(_interestingPoints.size() == 0)
+		{
+			return new Number(-1);
+		}
+		else
+		{
+			return _interestingPoints.get(gen.nextInt(_interestingPoints.size()-1));
+		}
+	}
+	
+	public ArrayList<hierarchy.Expression> getAllInterestingPoints()
+	{
+		if(_interestingPoints.isEmpty())
+		{
+			_interestingPoints = _conditions.findInterestingPoints();
+		}
+		
+		return _interestingPoints;
+	}
+	
+	public ArrayList<hierarchy.Expression> getAllLeftInterestingPoints()
+	{
+		if(_interestingPoints.isEmpty())
+		{
+			_LeftSidedInterestingPoints = _conditions.findLeftInterestingPoints();
+			_RightSidedInterestingPoints = _conditions.findRightInterestingPoints();
+		}
+			
+		return _LeftSidedInterestingPoints;
+	}
+	
+	public ArrayList<hierarchy.Expression> getAllRightInterestingPoints()
+	{
+		if(_interestingPoints.isEmpty())
+		{
+			_LeftSidedInterestingPoints = _conditions.findLeftInterestingPoints();
+			_RightSidedInterestingPoints = _conditions.findRightInterestingPoints();
+		}
+			
+		return _RightSidedInterestingPoints;
+	}
 	
 	//I don't believe we need this if we use Mathematica.
 //	public Domain intersection(Domain dom1, Domain dom2)

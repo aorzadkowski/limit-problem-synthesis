@@ -1,5 +1,6 @@
 package symbolicSets;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import hierarchy.Expression;
@@ -26,8 +27,33 @@ public class GreaterThanGreaterThan extends Inequality {
 		return _numericExpression1.evaluate(map) > value && value > _numericExpression2.evaluate(map);
 	}
 	
+	@Override
+	public ArrayList<Expression> findInterestingPoints() 
+	{
+		ArrayList<Expression> result = new ArrayList<Expression>();
+		result.add(_numericExpression1);
+		result.add(_numericExpression2);
+		return result;
+	}
+	
 	public String toString()
 	{
 		return "("+ _numericExpression1.toWolf()+ ">" +  _variable.toWolf() + ">" + _numericExpression2.toWolf() + ")";
+	}
+
+	@Override
+	public ArrayList<Expression> findLeftInterestingPoints() 
+	{
+		ArrayList<Expression> result = new ArrayList<Expression>();
+		result.add(_numericExpression1);
+		return result;
+	}
+
+	@Override
+	public ArrayList<Expression> findRightInterestingPoints() 
+	{
+		ArrayList<Expression> result = new ArrayList<Expression>();
+		result.add(_numericExpression2);
+		return result;
 	}
 }
