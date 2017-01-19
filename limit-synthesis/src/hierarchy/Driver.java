@@ -1,6 +1,7 @@
 package hierarchy;
 
 import java.util.*;
+import crossover.*;
 
 public class Driver
 {
@@ -12,90 +13,114 @@ public class Driver
         Map<Variable,Double> variableMap = new HashMap<Variable,Double>();
         variableMap.put(x1, (Math.PI/2));
         variableMap.put(x2, 1.0);
-        System.out.println(x1.unParse());
-        System.out.println(x1.getName());
-        System.out.println(x1.isContinuousAt(variableMap));
-        System.out.println("x1 = " + x1.evaluate(variableMap));
-        System.out.println(x2.unParse());
-        System.out.println(x2.isContinuousAt(variableMap));
-        System.out.println("x2 = " + x2.evaluate(variableMap));
         
-//        //--------Unary
-        UnaryAbsVal u1 = new UnaryAbsVal(x1);
-        System.out.println(u1.unParse());
-        System.out.println(u1.isContinuousAt(variableMap));
-        System.out.println("u1 = " + u1.evaluate(variableMap));
+        //TEST.25
+        Expression func1 = new BinaryDivideBy(new BinaryPlus(x1, new Number(2)),new UnaryAbsVal(x1));
+        Expression func2 = new BinaryDivideBy(new BinaryExponent(new Number(Math.E), x2),new UnarySquareRoot(x2));
         
-        UnaryCos u2 = new UnaryCos(x1);
-        System.out.println(u2.unParse());
-        System.out.println(u2.isContinuousAt(variableMap));
-        System.out.println("u2 = " + u2.evaluate(variableMap));
+        LimitExpression limExp1 = new LimitExpression(LimitExpression.BOTH, x1, new Number(0), func1);
+        LimitExpression limExp2 = new LimitExpression(LimitExpression.BOTH, x2, new Number(0), func2);
         
-        UnaryMinus u3 = new UnaryMinus(x1);
-        System.out.println(u3.unParse());
-        System.out.println(u3.isContinuousAt(variableMap));
-        System.out.println("u3 = " + u3.evaluate(variableMap));
         
-        //u4 posIntpowers
+        System.out.println(limExp1.unParse());
+        System.out.println(limExp1.getDepthMap().size());
         
-        UnarySin u5 = new UnarySin(x1);
-        System.out.println(u5.unParse());
-        System.out.println(u5.isContinuousAt(variableMap));
-        System.out.println("u5 = " + u5.evaluate(variableMap));
+        System.out.println(limExp2.unParse());       
+        System.out.println(limExp2.getDepthMap().size());
         
-        UnarySquareRoot u6 = new UnarySquareRoot(x1);
-        System.out.println(u6.unParse());
-        System.out.println(u6.isContinuousAt(variableMap));
-        System.out.println("u6 = " + u6.evaluate(variableMap));
+        LimitExpression child = Crossover.crossover(limExp1, limExp2);
+        System.out.println(child.unParse());
         
-        UnarySquared u7 = new UnarySquared(x1);
-        System.out.println(u7.unParse());
-        System.out.println(u7.isContinuousAt(variableMap));
-        System.out.println("u7 = " + u7.evaluate(variableMap));
         
-        UnaryTan u8 = new UnaryTan(x1);
-        System.out.println(u8.unParse());
-        System.out.println(u8.isContinuousAt(variableMap));
-        System.out.println("u8 = " + u8.evaluate(variableMap));
         
-        UnaryReciprocal u9 = new UnaryReciprocal(x1);
-        System.out.println(u9.unParse());
-        System.out.println(u9.isContinuousAt(variableMap));
-        System.out.println("u9 = " + u9.evaluate(variableMap));
-        
-        UnaryNaturalLog u10 = new UnaryNaturalLog(x1);
-        System.out.println(u10.unParse());
-        System.out.println(u10.isContinuousAt(variableMap));
-        System.out.println("u10 = " + u10.evaluate(variableMap));
-        
-        //---------Binary
-        
-        BinaryDivideBy b1 = new BinaryDivideBy(x1,x2);
-        System.out.println(b1.unParse());
-        System.out.println(b1.isContinuousAt(variableMap));
-        System.out.println("b1 = " + b1.evaluate(variableMap));
-        
-        BinaryMinus b2 = new BinaryMinus(x1,x2);
-        System.out.println(b2.unParse());
-        System.out.println(b2.isContinuousAt(variableMap));
-        System.out.println("b2 = " + b2.evaluate(variableMap));
-        
-        BinaryMult b3 = new BinaryMult(x1,x2);
-        System.out.println(b3.unParse());
-        System.out.println(b3.isContinuousAt(variableMap));
-        System.out.println("b3 = " + b3.evaluate(variableMap));
-        
-        BinaryPlus b4 = new BinaryPlus(x1,x2);
-        System.out.println(b4.unParse());
-        System.out.println(b4.isContinuousAt(variableMap));
-        System.out.println("b4 = " + b4.evaluate(variableMap));
-        
-        BinaryExponent b5 = new BinaryExponent(x1,x2);
-        System.out.println(b5.unParse());
-        System.out.println(b5.isContinuousAt(variableMap));
-        System.out.println("b5 = " + b5.evaluate(variableMap));
+        //End of Test.25
+//        System.out.println(x1.unParse());
+//        System.out.println(x1.getName());
+//        System.out.println(x1.isContinuousAt(variableMap));
+//        System.out.println("x1 = " + x1.evaluate(variableMap));
+//        System.out.println(x2.unParse());
+//        System.out.println(x2.isContinuousAt(variableMap));
+//        System.out.println("x2 = " + x2.evaluate(variableMap));
+//        
+////        //--------Unary
+//        UnaryAbsVal u1 = new UnaryAbsVal(x1);
+//        System.out.println(u1.unParse());
+//        System.out.println(u1.isContinuousAt(variableMap));
+//        System.out.println("u1 = " + u1.evaluate(variableMap));
+//        
+//        UnaryCos u2 = new UnaryCos(x1);
+//        System.out.println(u2.unParse());
+//        System.out.println(u2.isContinuousAt(variableMap));
+//        System.out.println("u2 = " + u2.evaluate(variableMap));
+//        
+//        UnaryMinus u3 = new UnaryMinus(x1);
+//        System.out.println(u3.unParse());
+//        System.out.println(u3.isContinuousAt(variableMap));
+//        System.out.println("u3 = " + u3.evaluate(variableMap));
+//        
+//        //u4 posIntpowers
+//        
+//        UnarySin u5 = new UnarySin(x1);
+//        System.out.println(u5.unParse());
+//        System.out.println(u5.isContinuousAt(variableMap));
+//        System.out.println("u5 = " + u5.evaluate(variableMap));
+//        
+//        UnarySquareRoot u6 = new UnarySquareRoot(x1);
+//        System.out.println(u6.unParse());
+//        System.out.println(u6.isContinuousAt(variableMap));
+//        System.out.println("u6 = " + u6.evaluate(variableMap));
+//        
+//        UnarySquared u7 = new UnarySquared(x1);
+//        System.out.println(u7.unParse());
+//        System.out.println(u7.isContinuousAt(variableMap));
+//        System.out.println("u7 = " + u7.evaluate(variableMap));
+//        
+//        UnaryTan u8 = new UnaryTan(x1);
+//        System.out.println(u8.unParse());
+//        System.out.println(u8.isContinuousAt(variableMap));
+//        System.out.println("u8 = " + u8.evaluate(variableMap));
+//        
+//        UnaryReciprocal u9 = new UnaryReciprocal(x1);
+//        System.out.println(u9.unParse());
+//        System.out.println(u9.isContinuousAt(variableMap));
+//        System.out.println("u9 = " + u9.evaluate(variableMap));
+//        
+//        UnaryNaturalLog u10 = new UnaryNaturalLog(x1);
+//        System.out.println(u10.unParse());
+//        System.out.println(u10.isContinuousAt(variableMap));
+//        System.out.println("u10 = " + u10.evaluate(variableMap));
+//        
+//        //---------Binary
+//        
+//        BinaryDivideBy b1 = new BinaryDivideBy(x1,x2);
+//        System.out.println(b1.unParse());
+//        System.out.println(b1.isContinuousAt(variableMap));
+//        System.out.println("b1 = " + b1.evaluate(variableMap));
+//        
+//        BinaryMinus b2 = new BinaryMinus(x1,x2);
+//        System.out.println(b2.unParse());
+//        System.out.println(b2.isContinuousAt(variableMap));
+//        System.out.println("b2 = " + b2.evaluate(variableMap));
+//        
+//        BinaryMult b3 = new BinaryMult(x1,x2);
+//        System.out.println(b3.unParse());
+//        System.out.println(b3.isContinuousAt(variableMap));
+//        System.out.println("b3 = " + b3.evaluate(variableMap));
+//        
+//        BinaryPlus b4 = new BinaryPlus(x1,x2);
+//        System.out.println(b4.unParse());
+//        System.out.println(b4.isContinuousAt(variableMap));
+//        System.out.println("b4 = " + b4.evaluate(variableMap));
+//        
+//        BinaryExponent b5 = new BinaryExponent(x1,x2);
+//        System.out.println(b5.unParse());
+//        System.out.println(b5.isContinuousAt(variableMap));
+//        System.out.println("b5 = " + b5.evaluate(variableMap));
         
         ///////////////////TEST.5
+        
+        
+        
         
         
       
@@ -139,6 +164,8 @@ public class Driver
 //        System.out.println(d1.evaluate(variableMap));
 //        System.out.println(d1.toString());
 //****************************TEST3
+        
+        
         
         
         

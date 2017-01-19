@@ -35,7 +35,16 @@ public class Variable implements Expression
     
     public double evaluate(Map<Variable,Double> variableMap) 
     {
-        return variableMap.get(this);
+    	
+    	try 
+    	{
+			return variableMap.get(this);
+		} catch (Exception e) 
+    	{
+			//Assume it was the only variable in the map
+			System.err.println("variable " + unParse() + " assumed to be " + variableMap.values().toArray()[0]);
+			return (double) variableMap.values().toArray()[0];
+		}
     }
     
     @Override

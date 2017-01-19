@@ -9,6 +9,8 @@ import geneticAlgorithm.FitnessCalc;
 import java.util.HashMap;
 import java.util.Map;
 import lexerAndParser.*;
+import mathematicaParser.*;
+import symbolicSets.*;
 import options.Options;
 import hierarchy.*;
 
@@ -17,9 +19,9 @@ public class LimitExpression
 {
 	private double fitness; //used in the Genetic algorithm.
 	private int _LRB; //Whether this limit expression is a left-handed(1), right-handed(-1), or both(0);
-	private final int LEFT = 1;
-	private final int RIGHT = -1;
-	private final int BOTH = 0;
+	public static final int LEFT = 1;
+	public static final int RIGHT = -1;
+	public static final int BOTH = 0;
 	
 	private HashMap<Expression, Integer> depthMap;
 	
@@ -30,13 +32,16 @@ public class LimitExpression
 	private String _stringRepresentation = ""; //only created when using the overloaded constructor.
 												//This represents the limit notation. "lim _variable>_LRB _target "
 	
+	private Domain _domain = null;//the domain of the function as provided by mathematica
+	
 	public LimitExpression()
 	{
 		_LRB = BOTH;
 		_variable = (Variable)null;
 		_target = (Expression)null;
 		_function = (Expression)null;
-		depthMap = new HashMap<>();
+		
+		depthMap = new HashMap<Expression, Integer>();
 		initializeDepthMap();
 	}
 	
@@ -48,8 +53,8 @@ public class LimitExpression
 		_target = target.deepCopy();
 		//_function = function;
 		_function = function.deepCopy();
-
-		depthMap = new HashMap<>();
+		
+		depthMap = new HashMap<Expression, Integer>();
 		initializeDepthMap();
 	}
 	
@@ -89,26 +94,6 @@ public class LimitExpression
 			Parser LEParser = new Parser();
 			ArrayList<Lexer.Token> LELOutput= LELexer.lex(targetString);
 			Expression exp = LEParser.parse(LELOutput);
-//			try
-//			{
-//				exp = LEParser.parse(LELOutput);
-//			}
-//			catch(Exception e)
-//			{
-//				
-//				e.printStackTrace();
-//				System.out.println(targetString);
-//				
-//				
-//				targetString = stringRepresentation.substring(7, stringRepresentation.indexOf('(') -1);
-//				LELOutput= LELexer.lex(targetString);
-//				exp = LEParser.parse(LELOutput);
-//				
-//				e.printStackTrace();
-//				System.out.println(targetString);
-//				System.out.println("Here is the target Expression " + exp.unParse());
-//			}
-			
 			
 			_target = exp;
 		}
@@ -119,26 +104,13 @@ public class LimitExpression
 			Parser LEParser = new Parser();
 			ArrayList<Lexer.Token> LELOutput= LELexer.lex(targetString);
 			Expression exp = LEParser.parse(LELOutput);
-//			try
-//			{
-//				exp = 
-//			}
-//			catch(Exception e)
-//			{
-//				targetString = stringRepresentation.substring(8, stringRepresentation.indexOf('(') -1);
-//				LELOutput= LELexer.lex(targetString);
-//				exp = LEParser.parse(LELOutput);
-//				
-//				e.printStackTrace();
-//				System.out.println(targetString);
-//				System.out.println("Here is the target Expression " + exp.unParse());
-//			}
-			//System.out.println("Here is the target Expression " + exp.unParse());
+
 			_target = exp;
 		}
-		_function = aFunction;	
-		depthMap = new HashMap<>();
-		initializeDepthMap();	
+		_function = aFunction;
+		
+		depthMap = new HashMap<Expression, Integer>();
+		initializeDepthMap();
 	}
 	
 	//Evaluates this limit expression without the limit
@@ -183,85 +155,7 @@ public class LimitExpression
 		return false;
 	}
 	
-	//This method examines the output values of the function as the input values approach the target from the left.
-	//This method returns a string which describes the behavior of the function under these circumstances. 
-	public String leftHandBehaviorAtTarget()
-	{
-		String change;
-		
-		HashMap m = new HashMap<Variable, Double>();
-		HashMap m2 = new HashMap<Variable, Double>();
-		Double targetDouble = _target.evaluate(m2);
-		m.put(_variable, targetDouble - .0001);
-		
-		Double approx1 = _function.evaluate(m);
-		m.clear();
-		m.put(_variable, targetDouble - .00001);
-		Double approx2 = _function.evaluate(m);
-		m.clear();
-		m.put(_variable, targetDouble - .000001);
-		Double approx3 = _function.evaluate(m);
-
-
-		if(approx1 > approx2 && approx2 > approx3)
-		{
-			change = "negative";
-		}
-		else if(approx1 < approx2 && approx2 < approx3)
-		{
-			change = "positive";
-		}
-		else if(approx1.equals(approx2) && approx2.equals(approx3))
-		{
-			change = "zero";
-		}
-		else
-		{
-			change = "not clear";
-		}
-		
-		return ("An approximation is " + approx3 + " and the slope is " + change);
-	}
 	
-	//This method examines the output values of the function as the input values approach the target from the left.
-		//This method returns a string which describes the behavior of the function under these circumstances. 
-		public String rightHandBehaviorAtTarget()
-		{
-			String change;
-			
-			HashMap m = new HashMap<Variable, Double>();
-			HashMap m2 = new HashMap<Variable, Double>();
-			Double targetDouble = _target.evaluate(m2);
-			m.put(_variable, targetDouble + .0001);
-			
-			Double approx3 = _function.evaluate(m);
-			m.clear();
-			m.put(_variable, targetDouble + .00001);
-			Double approx2 = _function.evaluate(m);
-			m.clear();
-			m.put(_variable, targetDouble + .000001);
-			Double approx1 = _function.evaluate(m);
-
-
-			if(approx1 > approx2 && approx2 > approx3)
-			{
-				change = "negative";
-			}
-			else if(approx1 < approx2 && approx2 < approx3)
-			{
-				change = "positive";
-			}
-			else if(approx1.equals(approx2) && approx2.equals(approx3))
-			{
-				change = "zero";
-			}
-			else
-			{
-				change = "not clear";
-			}
-			
-			return ("An approximation is " + approx3 + " and the slope is " + change);
-		}
 	
 	//This method will eventually solve the limit expression
 	public double evaluate()
@@ -301,6 +195,42 @@ public class LimitExpression
 		return "FunctionRange[" + _function.toWolf() + "," + _variable.toWolf()+",y,Reals]";
 	}
 	
+	public void setTarget(Expression expr)
+	{
+		_target = expr;
+	}
+	
+	public void setLRB(int LRB)
+	{
+		_LRB = LRB;
+	}
+	
+	public void setLRB(String LRB)
+	{
+		if(LRB.equalsIgnoreCase("Left"))
+		{
+			_LRB = LEFT;
+		}
+		else if(LRB.equalsIgnoreCase("Right"))
+		{
+			_LRB = RIGHT;
+		}
+		else
+		{
+			_LRB = BOTH;
+		}
+	}
+	
+	public Domain getDomain()
+	{
+		return _domain;
+	}
+	
+	public void setDomain(Domain d)
+	{
+		_domain = d;
+	}
+	
 	public Variable getVariable()
 	{
 		return _variable;
@@ -333,8 +263,11 @@ public class LimitExpression
 	public void setFunction(Expression e)
 	{
 		_function = e;
-		depthMap = new HashMap<>();
-		initializeDepthMap();
+	}
+	
+	public HashMap<Expression,Integer> getDepthMap()
+	{
+		return depthMap;
 	}
 	
 	public String getStringRepresentation()
@@ -522,11 +455,16 @@ public class LimitExpression
 	//////////All map related methods start here.///////////
 	////////////////////////////////////////////////////////
 	public void initializeDepthMap() {
+		//System.out.println("Original initialize depth map called");
+		depthMap = new HashMap<Expression, Integer>();
 		initializeDepthMap(_function, 0);
 	}
 	
 	private void initializeDepthMap(Expression node, int depth) {
+		
+		//System.out.println("InitializeDepthMap called.");
 		depthMap.put(node, depth);
+
 		if (node instanceof UnaryOperator) {
 			if (((UnaryOperator) node).getExp() != null) {
 				initializeDepthMap(((UnaryOperator) node).getExp(), depth + 1);
@@ -539,23 +477,24 @@ public class LimitExpression
 				initializeDepthMap(((BinaryOperator) node).getExp2(), depth + 1);
 			}
 		}
+		//System.out.println("DepthMap size = " + depthMap.size());
 	}
 	
 	public void updateMap() {
+		System.out.println("Update map");
 		initializeDepthMap();
 	}
 	
 	public ArrayList<Expression> getAllLeaves() {
 		ArrayList<Expression> list = new ArrayList<>();
-		if (depthMap == null) {
-			depthMap = new HashMap<>();
-			initializeDepthMap();
-		}
-		Object[] keys =  depthMap.keySet().toArray();
 		
-		for (Object exp : keys) {
-			if (((Expression) exp) instanceof Variable || ((Expression) exp) instanceof Number) 
-				list.add(((Expression) exp));
+		//System.out.println(depthMap.size());
+		
+		Expression[] keys = (Expression[]) depthMap.keySet().toArray(new Expression[0]);
+		
+		for (Expression exp : keys) {
+			if (exp instanceof Variable || exp instanceof Number) 
+				list.add(exp);
 		}
 		
 		return list;
