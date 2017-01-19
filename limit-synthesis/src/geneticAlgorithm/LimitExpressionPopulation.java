@@ -72,6 +72,25 @@ public class LimitExpressionPopulation
         individuals[index] = indiv;
     }
     
+    //delete an individual and shifts all individuals after the deleted individual, to the left.
+    public void deleteIndividual(int index)
+    {
+    	LimitExpression[] newindividuals = new LimitExpression[individuals.length - 1];
+    	int i = 0;
+    	while(i < index)
+    	{
+    		newindividuals[i] = individuals[i];
+    		i++;
+    	}
+    	
+    	while(index < individuals.length-1)
+    	{
+    		newindividuals[index] = individuals[index + 1];
+    		index++;
+    	}
+    	individuals = newindividuals;
+    }
+    
     public static LimitExpression tournamentSelection(LimitExpressionPopulation pop)
     {
     	// Create a tournament population

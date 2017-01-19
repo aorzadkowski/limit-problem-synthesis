@@ -12,7 +12,9 @@ import java.util.HashMap;
 import crossover.Crossover;
 import externalConnection.LocalMathematicaCasInterface;
 import lexerAndParser.*;
+import mathematicaParser.*;
 import options.Options;
+import symbolicSets.Domain;
 import hierarchy.*;
 
 public class DriverGenAlg 
@@ -100,6 +102,8 @@ public class DriverGenAlg
     		
     		LimitExpressionPopulation originalPopulation = new LimitExpressionPopulation(LimitExpressionList);
     		
+    		int originalPopSize = originalPopulation.size();
+    		
 //    		System.out.println("We will test crossover.\n");
 //    		
 //    		Expression random1 = originalPopulation.getIndividual((int)(Math.random() * originalPopulation.size())).getFunction();
@@ -115,13 +119,15 @@ public class DriverGenAlg
     		System.out.println("Figures messed with and what they should be: tournamentSize = 5, maxSize = 20, minSize = 2, MutationRate = .015");
 
     		
- //    		System.out.println("Testing Mathematica Connection:");
-//    		System.out.println(LocalMathematicaCasInterface.getInstance().connection());
+    		System.out.println("Testing Mathematica Connection:");
+    		System.out.println(LocalMathematicaCasInterface.getInstance().connection());
     		
+    		int totalNumberOfSeeds = 0;
+    		int NumberOfLimitProblemsPerSeed = 0;
     		int generationNumber = 1;
     		while(generationNumber < 101)
     		{   			
-    			LimitExpressionPopulation newPopulation = new LimitExpressionPopulation(originalPopulation.size(), false);
+    			LimitExpressionPopulation newPopulation = new LimitExpressionPopulation(originalPopSize, false);
     			
     			// Keep our best individual
                 if (elitism) {
@@ -138,7 +144,7 @@ public class DriverGenAlg
                 
                 // Loop over the population size and create new individuals with
                 // crossover
-                for (int i = elitismOffset; i < originalPopulation.size(); i++) {
+                for (int i = elitismOffset; i < originalPopSize; i++) {
                 	LimitExpression indiv1 = originalPopulation.tournamentSelection();
                     LimitExpression indiv2 = originalPopulation.tournamentSelection();
                     
@@ -156,29 +162,38 @@ public class DriverGenAlg
                     
                     //indiv1 = originalPopulation.getIndividual(i);
                     //indiv2 = originalPopulation.getIndividual(i);
+                    
+                    //actual crossover
 
-                    double roll = Math.random();
-                    if (roll< .5)
-                    {
-                    	LimitExpression newExp1 = Crossover.crossover(indiv1, indiv2); 
-                    	indiv1.setFunction(newExp1.getFunction());
-                    	//indiv1.mutateLimitExpression();
-                    	newPopulation.saveIndividual(i, indiv1);
-                    }
-                    else
-                    {
-                    	LimitExpression newExp2 = Crossover.crossover(indiv1, indiv2);
-                    	indiv2.setFunction(newExp2.getFunction());
-                    	//indiv2.mutateLimitExpression();
-                    	newPopulation.saveIndividual(i, indiv2);
-                    }
+                   	//Expression newExp1 = Crossover.crossover(indiv1.getFunction(), indiv2.getFunction());
+                   	//indiv1.setFunction(newExp1);
+                   	
+                   	System.out.println("Attempting crossover with : " + indiv1.unParse() + " and " + indiv2.unParse());
+                   	indiv1.initializeDepthMap();
+                   	//System.out.println("Indiv1 depthmap size " + indiv1.getDepthMap().size());
+                   	indiv1 = Crossover.crossover(indiv1, indiv2);
+                   	
+                   	//indiv1.mutateLimitExpression();
+                   	newPopulation.saveIndividual(i, indiv1);
+
                 }
                 
                 System.out.println("mutation counter at generation " + generationNumber);
+                try {
+					System.out.println("Average number of Problems per seed: " + NumberOfLimitProblemsPerSeed/(double)totalNumberOfSeeds);
+				} catch (ArithmeticException ae) {
+					System.out.println("Average number of Problems per seed: 0.0");
+				}
                 // Mutate population
                 for (int i = elitismOffset; i < newPopulation.size(); i++) 
                 {
-                	int timesMutated = 0;
+                	newPopulation.getIndividual(i).mutateLimitExpression();
+                	if(!newPopulation.getIndividual(i).getFunction().validate())
+                	{
+                		newPopulation.deleteIndividual(i);
+                	}
+                	
+                	/*int timesMutated = 0;
                 	do
                 	{
                 		newPopulation.getIndividual(i).mutateLimitExpression();
@@ -192,7 +207,7 @@ public class DriverGenAlg
                 		LimitExpression newGeneratedLimExp = new LimitExpression();
                 		newGeneratedLimExp.generateLimitExpression();
                 		newPopulation.saveIndividual(i,newGeneratedLimExp);
-                	}
+                	}*/
                 }
                 
                 //reReference
@@ -201,26 +216,103 @@ public class DriverGenAlg
                 	newPopulation.getIndividual(i).getFunction().reReference();
                 }
                 
-                bufferedWriter.write("Here is generation " + generationNumber);
+                bufferedWriter.write("##Here is generation " + generationNumber);
                 bufferedWriter.newLine();
+                //printing
                 for (int i = 0; i < newPopulation.size(); i++) 
                 {
-                    bufferedWriter.write(newPopulation.getIndividual(i).getFunction().validate() + " " + newPopulation.getIndividual(i).unParse());
+                    //bufferedWriter.write(newPopulation.getIndividual(i).getFunction().validate() + " " + newPopulation.getIndividual(i).unParse());
                     bufferedWriter.write("##" +newPopulation.getIndividual(i).getWolframFunctionDomainString());
                     bufferedWriter.newLine();
-                    bufferedWriter.write(newPopulation.getIndividual(i).getWolframFunctionRangeString());
-                	bufferedWriter.write(LocalMathematicaCasInterface.getInstance().getFunctionDomain(newPopulation.getIndividual(i)));
+//                     //bufferedWriter.write(newPopulation.getIndividual(i).getWolframFunctionDomainString());
+//                    //bufferedWriter.newLine();*/
+                    String domainString = LocalMathematicaCasInterface.getInstance().getFunctionDomain(newPopulation.getIndividual(i));
+                	bufferedWriter.write(domainString);
+                	try
+                	{
+                		ArrayList<LogicLexer.Token> ALOut= LogicLexer.lex(domainString);
+                		Domain d = LogicParser.parseDomain(ALOut);
+                    	newPopulation.getIndividual(i).setDomain(d);
+                    	
+                	}
+                	catch(Exception e)
+                	{
+                		System.err.println("Error when working on: " + domainString);
+                		e.printStackTrace();
+                		
+                		if(e instanceof PruneException)
+                		{
+                			System.err.println("PruneException reached");
+                			newPopulation.getIndividual(i).setDomain(new Domain());	
+                		}
+                		else
+                		{
+                			throw new IllegalArgumentException("Fix this garbage.");
+                		}
+                	}
+                	bufferedWriter.newLine();
+                	bufferedWriter.write(newPopulation.getIndividual(i).getDomain().toString());
                 	bufferedWriter.newLine();
                 }
                 bufferedWriter.newLine();
-                bufferedWriter.newLine(); 
-
+                bufferedWriter.newLine();
+                
+                //domain validation
+                for (int i = 0; i < newPopulation.size(); i++)
+                {
+                	if(!newPopulation.getIndividual(i).getDomain().validate())
+                	{
+                		newPopulation.deleteIndividual(i);
+                	}
+                }
+                
+//                //re-assigning target values for the limit expressions with the newfound domains
+//                for (int i = 0; i < newPopulation.size(); i++)
+//                {
+//                	newPopulation.getIndividual(i).setTarget(newPopulation.getIndividual(i).getDomain().getAnInterestingPoint());
+//                }
+                
+                //printing
+                for (int i = 0; i < newPopulation.size(); i++) 
+                {
+                	totalNumberOfSeeds++;
+                	
+                    try 
+                    {
+                    	newPopulation.getIndividual(i).setLRB("Left");
+						for(Expression expL: newPopulation.getIndividual(i).getDomain().getAllLeftInterestingPoints())
+						{
+							NumberOfLimitProblemsPerSeed++;
+							newPopulation.getIndividual(i).setTarget(expL);
+							bufferedWriter.write(newPopulation.getIndividual(i).unParse());
+						    bufferedWriter.newLine();
+						}
+						newPopulation.getIndividual(i).setLRB("Right");
+						for(Expression expR: newPopulation.getIndividual(i).getDomain().getAllRightInterestingPoints())
+						{
+							NumberOfLimitProblemsPerSeed++;
+							newPopulation.getIndividual(i).setTarget(expR);
+							bufferedWriter.write(newPopulation.getIndividual(i).unParse());
+						    bufferedWriter.newLine();
+						}
+					} catch (Exception e) 
+                    {
+						System.err.println(newPopulation.getIndividual(i).getDomain().toString());
+						e.printStackTrace();
+						throw new NullPointerException("Problem with getAllInterestingPoints");
+					}                    
+                }
+                bufferedWriter.newLine();
+                bufferedWriter.newLine();
+                
+                //re-assignment
                 originalPopulation = newPopulation;
                 
                 System.out.println();
                 System.out.println(originalPopulation.getFittest().getFitness() + "\t" + originalPopulation.getFittest().translateToWolfram());
                 generationNumber++;
     		}
+    		System.out.println("Average number of Problems per seed: " + NumberOfLimitProblemsPerSeed/totalNumberOfSeeds);
     		
             //end file processing.
             bufferedWriter.close();
